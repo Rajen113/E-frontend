@@ -7,6 +7,8 @@ import { FaUser, FaLock } from "react-icons/fa"; // from FontAwesome
 import { MdEmail } from "react-icons/md"; // from Material Design
 
 
+
+
 function Login() {
   const navigate = useNavigate()
   const { login } = useContext(AuthContext) // ✅ use context
@@ -27,7 +29,7 @@ function Login() {
       setLoading(true)
       const res = await axiosInstance.post('/user/login', formData)
       const token = res.data.access_token
-      
+
       setSuccess('Login successful! Redirecting...')
       setTimeout(() => navigate('/'), 1500)
     } catch (err) {
