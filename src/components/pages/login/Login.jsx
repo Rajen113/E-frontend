@@ -6,7 +6,7 @@ import './Login.css'
 
 function Login() {
   const navigate = useNavigate()
-  const { login } = useContext(AuthContext) // ✅ use context
+  const { login } = useContext(AuthContext) // use context
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
