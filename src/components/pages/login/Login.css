@@ -1,63 +1,198 @@
-/* ---------- MAIN CONTAINER ---------- */
-.login-wrapper {
-  min-height: 100vh;
+
+.login-page {
   display: flex;
-  align-items: center;
+  height: 100vh;
+  width: 80%;
+  /* margin: 0 auto; */
+  background-color: #f9f9f9;
   justify-content: center;
-  background-color: #f5f5f5;
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
-/* ---------- FORM CARD ---------- */
-.login-box {
-  background-color: #fff;
-  padding: 30px 25px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
-/* ---------- HEADING ---------- */
-.login-box h2 {
-  text-align: center;
-  font-size: 1.6rem;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-/* ---------- FORM ---------- */
-form {
+.img-login {
+  flex: 1;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
+  height: 400px;
+  justify-content: center;
+  margin-top: 40px;
+  box-shadow: 0px 4px 20px rgba(172, 133, 133, 0.1);
+
 }
 
-form input {
-  padding: 10px 12px;
+.left-img {
+  width: 500px;
+  height: 200px;
+  
+}
+
+.img-login img {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  
+}
+
+/* ---------- Signup Form ---------- */
+.login-container {
+  flex: 1;
+   height: 400px;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  /* align-items: center; */
+}
+
+.login-box {
+  width: 80%;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-box h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px 10px;
+  margin: 8px 0;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  margin-bottom: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.login-box input:focus {
+  border-color: #db4c28;
   outline: none;
+  box-shadow: 0 0 5px rgba(219, 76, 40, 0.3);
 }
 
-form input:focus {
-  border-color: #ff6600;
-}
-
-/* ---------- BUTTON ---------- */
-.login-btn {
-  background-color: #ff6600;
-  color: #fff;
+.create-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #db4c28;
+  color: white;
   border: none;
-  border-radius: 6px;
-  padding: 10px;
-  font-size: 1rem;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 15px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.login-btn:hover {
-  background-color: #e65c00;
+.create-btn:hover {
+  background-color: #b53c20;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #aaa;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  width: 40%;
+  height: 1px;
+  background-color: #ccc;
+  top: 50%;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.login-link {
+  text-align: center;
+  color: #555;
+}
+
+.login-link a {
+  color: #db4c28;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Mobile Responsive Fix */
+@media (max-width: 900px) {
+  .login-page {
+    flex-direction: column;
+    width: 95%;
+    height: auto;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+  }
+
+  .img-login {
+    order: -1; /* Image on top */
+    height: auto;
+    justify-content: center;
+  }
+
+  .left-img {
+    width: 250px;
+    height: auto;
+  }
+
+  .img-login img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .login-container {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-box {
+    width: 90%;
+    max-width: 350px;
+    padding: 30px 20px;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-box h2 {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .create-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
 
 /* ---------- ERROR MESSAGE ---------- */
@@ -69,24 +204,6 @@ form input:focus {
   text-align: center;
   font-size: 0.9rem;
   margin-bottom: 10px;
-}
-
-/* ---------- REGISTER LINK ---------- */
-.register-text {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #555;
-  margin-top: 12px;
-}
-
-.register-text a {
-  color: #ff6600;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.register-text a:hover {
-  text-decoration: underline;
 }
 
 .success-text {

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/axiosConfig";
 import "./Register.css";
+import { FaUser, FaLock } from "react-icons/fa"; // from FontAwesome
+import { MdEmail } from "react-icons/md"; // from Material Design
+
 
 function Register() {
   const navigate = useNavigate();
@@ -27,7 +30,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ Basic Validation
+    // Basic Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords don't match!");
       return;
@@ -49,11 +52,12 @@ function Register() {
       setLoading(true);
       const res = await axiosInstance.post("/user/register", userData);
 
-      // Show success message instead of alert
+    
+      console.log(res.data)
       setSuccess(res.data.message || "Registration successful!");
       setError("");
 
-      // ✅ Redirect to login page after short delay
+     
       setTimeout(() => {
         navigate("/login");
       }, 1500);
@@ -68,21 +72,17 @@ function Register() {
 
   return (
     <div className="signup-page">
-      {/* ✅ Left Image Section */}
       <div className="img-signup">
-        <div className="left-img">
+        {/* <div className="left-img"> */}
           <img src="SideImage.png" alt="Register Illustration" />
-        </div>
+        {/* </div> */}
       </div>
 
-      {/* ✅ Register Form Section */}
       <div className="signup-container">
         <div className="signup-box">
           <h2>Create Account</h2>
-          <p className="subtitle">Enter your details below</p>
-
+        
           <form onSubmit={handleSubmit}>
-            {/* ✅ Error or Success Messages */}
             {error && <p className="error-text">{error}</p>}
             {success && <p className="success-text">{success}</p>}
 

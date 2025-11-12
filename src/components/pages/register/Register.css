@@ -1,60 +1,48 @@
-/* ---------- Global Layout ---------- */
+
 .signup-page {
   display: flex;
   min-height: 100vh;
   width: 80%;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
   justify-content: center;
-  align-items: stretch; /* Ensures both sides match in height */
+  align-items: stretch;
   font-family: "Poppins", sans-serif;
   gap: 30px;
 }
 
-/* ---------- Left Image Section ---------- */
+
 .img-signup {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Full viewport height */
-  border-radius: 12px;
+  position: relative;
+  height: 600px;
+  margin-top: 6px;
   overflow: hidden;
-}
-
-.left-img {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  box-shadow: 0px 4px 20px rgba(7, 6, 6, 0.1);
 }
 
 .img-signup img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit:contain; /* Fill the panel properly */
-  border-radius: 0;
-  transition: transform 0.4s ease;
+  object-fit: cover; 
 }
 
-.img-signup img:hover {
-  transform: scale(1.03);
-}
 
-/* ---------- Register Form Section ---------- */
 .signup-container {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  height: 600px;
 }
 
 .signup-box {
   width: 80%;
   max-width: 420px;
   background-color: #fff;
-  padding: 45px 35px;
+  padding: 20px 35px;
   border-radius: 15px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
@@ -73,7 +61,7 @@
   text-align: center;
 }
 
-/* ---------- Input Fields ---------- */
+
 .signup-box input {
   width: 100%;
   padding: 12px 10px;
@@ -90,7 +78,7 @@
   box-shadow: 0 0 5px rgba(219, 76, 40, 0.3);
 }
 
-/* ---------- Button ---------- */
+
 .create-btn {
   width: 100%;
   padding: 12px;
@@ -110,7 +98,7 @@
   transform: translateY(-1px);
 }
 
-/* ---------- Divider ---------- */
+
 .divider {
   text-align: center;
   margin: 20px 0;
@@ -137,7 +125,7 @@
   right: 0;
 }
 
-/* ---------- Login Link ---------- */
+
 .login-link {
   text-align: center;
   color: #555;
@@ -154,7 +142,7 @@
   text-decoration: underline;
 }
 
-/* ---------- Error Message ---------- */
+
 .error-text {
   color: #db4c28;
   background: rgba(219, 76, 40, 0.05);
@@ -166,7 +154,7 @@
   text-align: center;
 }
 
-/* ---------- Responsive Design ---------- */
+
 @media (max-width: 900px) {
   .signup-page {
     flex-direction: column;
@@ -187,16 +175,10 @@
     border-radius: 0;
   }
 
-  .left-img {
-    width: 100%;
-    height: auto;
-  }
 
   .img-signup img {
-    width: 100%;
-    height: auto;
     object-fit: contain;
-    border-radius: 8px;
+    position: static;
   }
 
   .signup-container {
@@ -237,3 +219,5 @@
   text-align: center;
   font-weight: 500;
 }
+
+
