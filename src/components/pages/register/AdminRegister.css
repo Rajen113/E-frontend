@@ -1,0 +1,141 @@
+/* 🌟 Wrapper */
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #283048, #859398);
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+}
+
+/* 🧱 Form Container */
+.register-right {
+  background: #fff;
+  border-radius: 12px;
+  padding: 45px 35px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.6s ease-in-out;
+  border-top: 4px solid #283048;
+}
+
+/* ✨ Heading */
+.register-right h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+  color: #283048;
+  margin-bottom: 25px;
+}
+
+/* 🧾 Inputs */
+.register-right form input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  background-color: #f8f8f8;
+  transition: all 0.3s ease;
+}
+
+.register-right form input:focus {
+  border-color: #283048;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(40, 48, 72, 0.25);
+}
+
+/* 🚀 Button */
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #283048, #859398);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.register-btn:hover {
+  transform: scale(1.03);
+  background: linear-gradient(135deg, #202636, #707b89);
+}
+
+.register-btn:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+}
+
+/* ❌ Error Text */
+.error-text {
+  color: #d9534f;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* ✅ Success Message (if you add later) */
+.success-text {
+  color: #28a745;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* 🔗 Login Text */
+.login-text {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.login-text a {
+  color: #283048;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.login-text a:hover {
+  color: #1d2230;
+  text-decoration: underline;
+}
+
+/* 📱 Responsive */
+@media (max-width: 480px) {
+  .register-right {
+    padding: 30px 20px;
+  }
+
+  .register-right h2 {
+    font-size: 22px;
+  }
+
+  .register-right form input {
+    font-size: 14px;
+  }
+
+  .register-btn {
+    font-size: 15px;
+  }
+}
+
+/* 💫 Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
