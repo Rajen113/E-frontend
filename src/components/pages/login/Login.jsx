@@ -27,7 +27,7 @@ function Login() {
       setLoading(true)
       const res = await axiosInstance.post('/user/login', formData)
       const token = res.data.access_token
-
+      
       setSuccess('Login successful! Redirecting...')
       setTimeout(() => navigate('/'), 1500)
     } catch (err) {
