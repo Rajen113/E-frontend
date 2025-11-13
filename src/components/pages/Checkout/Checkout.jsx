@@ -20,12 +20,12 @@ export default function Checkout() {
 
   // Protect Checkout
   useEffect(() => {
-    if (isLoggedIn) navigate("/login");
+    if (!isLoggedIn) navigate("/login");
     if (cart.length === 0) navigate("/cart");
   }, [isLoggedIn, cart]);
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const shipping = subtotal > 0 ? 50 : 0;
+  const shipping = subtotal > 1000 ? 0 : 50;
   const total = subtotal + shipping;
 
   const handlePlaceOrder = () => {

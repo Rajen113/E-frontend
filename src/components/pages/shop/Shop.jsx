@@ -43,7 +43,7 @@ function Shop() {
 
   /* Add to cart */
   const handleAdd = (product) => {
-    if (isLoggedIn) {
+    if (!isLoggedIn) {
       navigate("/login");
       return;
     }
@@ -104,8 +104,8 @@ function Shop() {
 
               {/* Truncated Description */}
               <p className="shop-desc">
-                {product.description.length > 60
-                  ? product.description.substring(0, 60) + "..."
+                {product.description.length > 30
+                  ? product.description.substring(0, 30) + "..."
                   : product.description}
               </p>
 
