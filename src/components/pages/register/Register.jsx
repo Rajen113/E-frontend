@@ -80,7 +80,7 @@ function Register() {
 
       <div className="signup-container">
         <div className="signup-box">
-          <h2>Create Account</h2>
+            <h2><FaUser />User Registration</h2>
         
           <form onSubmit={handleSubmit}>
             {error && <p className="error-text">{error}</p>}
