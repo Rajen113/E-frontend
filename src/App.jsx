@@ -12,6 +12,8 @@ import Cart from './components/pages/cart/Cart'
 import AdminRegister from './components/pages/register/AdminRegister'
 import Contact from './components/pages/contact/Contact'
 import ProductDetails from './components/pages/product/ProductDetails'
+import Checkout from './components/pages/Checkout/Checkout'
+import OrderSuccess from './components/pages/Checkout/OrderSuccess'
 
 function App() {
   return (
@@ -29,6 +31,9 @@ function App() {
           <Route path='/cart' element={<Cart/>} /> 
           <Route path='/contact' element={<Contact/>}  />
           <Route path="/product/:id" element={<ProductDetails/>} /> 
+          <Route path='/checkout' element={<Checkout/>} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+
           </Route>
       </Routes>
     </BrowserRouter>
