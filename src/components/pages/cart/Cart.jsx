@@ -22,14 +22,14 @@ export default function Cart() {
             
             {/* IMAGE FIXED */}
             <img 
-              src={item.img} 
-              alt={item.name} 
+              src={item.thumbnail} 
+              alt={item.title} 
             />
 
             <div className="cart-info">
 
               {/* NAME FIXED */}
-              <h3>{item.name}</h3>
+              <h3>{item.title}</h3>
 
               {/* PRICE */}
               <p>₹{item.price}</p>
