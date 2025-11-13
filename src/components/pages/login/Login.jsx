@@ -43,7 +43,7 @@ function Login() {
     <div className="login-page">
 
      <div className="img-login">
-        <img src="/SideImage.png" alt="login Illustration" />
+        <img src="/register.png" alt="login Illustration" />
       </div>
 
 
