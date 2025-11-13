@@ -1,7 +1,7 @@
 /* 🌐 Layout Wrapper */
 .layout-content {
   min-height: calc(100vh - 180px); /* leaves space for navbar + footer */
-  padding: 40px 20px;
+  padding: 0px 20px;
   background-color: #f9f9f9;
   display: flex;
   flex-direction: column;

@@ -24,9 +24,11 @@ export default function Contact() {
   return (
     <div className="contact-page">
       <div className="contact-container">
-        <h1>Contact <span>Us</span></h1>
+        <h1>
+          Contact <span>Us</span>
+        </h1>
         <p className="contact-subtitle">
-          We'd love to hear from you! Please fill out the form or reach us through the details below.
+          We'd love to hear from you! Fill out the form or reach us through the details below.
         </p>
 
         <div className="contact-content">
@@ -84,9 +86,15 @@ export default function Contact() {
             <p>📞 +91 98765 43210</p>
 
             <div className="social-icons">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer">🌐</a>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer">🐦</a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer">📸</a>
+              <a href="https://facebook.com" target="_blank" rel="noreferrer">
+                🌐
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer">
+                🐦
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer">
+                📸
+              </a>
             </div>
           </div>
         </div>

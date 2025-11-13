@@ -11,6 +11,7 @@ import Profile from './components/pages/profile/Profile'
 import Cart from './components/pages/cart/Cart'
 import AdminRegister from './components/pages/register/AdminRegister'
 import Contact from './components/pages/contact/Contact'
+import ProductDetails from './components/pages/product/ProductDetails'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/profile' element={<Profile/>} /> 
           <Route path='/cart' element={<Cart/>} /> 
           <Route path='/contact' element={<Contact/>}  />
+          <Route path="/product/:id" element={<ProductDetails/>} /> 
           </Route>
       </Routes>
     </BrowserRouter>
