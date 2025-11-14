@@ -21,26 +21,27 @@ function Shop() {
 
   if (loading) return <h2 className="loading">Loading products...</h2>;
 
-  // Transform according to API EXACTLY
+  /* Transform DummyJSON API data */
   const transformedProducts = products.map((p) => ({
     id: p.id,
     title: p.title,
-    price: Math.round(p.price * 80), // Convert USD → ₹
+    price: Math.round(p.price * 80),
     category: p.category,
     thumbnail: p.thumbnail,
+    description: p.description,
   }));
 
-  // Filter logic
+  /* Filters */
   const filteredProducts = transformedProducts.filter((p) => {
-    const catMatch =
+    const matchCategory =
       selectedCategory === "All" || p.category === selectedCategory;
 
-    const priceMatch = p.price <= priceRange;
+    const matchPrice = p.price <= priceRange;
 
-    return catMatch && priceMatch;
+    return matchCategory && matchPrice;
   });
 
-  // Add to cart
+  /* Add to cart */
   const handleAdd = (product) => {
     if (isLoggedIn) {
       navigate("/login");
@@ -50,15 +51,18 @@ function Shop() {
     showToast("Product added to cart!");
   };
 
+  /* All categories */
+  const categories = ["All", ...new Set(products.map((p) => p.category))];
+
   return (
     <div className="shop-container">
 
-      {/* Filters */}
+      {/* ---------------- FILTER SECTION ---------------- */}
       <div className="shop-filters">
-        
-        {/* Category Filters */}
+
+        {/* Category filter */}
         <div className="filter-scroll">
-          {["All", ...new Set(products.map((p) => p.category))].map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               className={selectedCategory === cat ? "active" : ""}
@@ -69,7 +73,7 @@ function Shop() {
           ))}
         </div>
 
-        {/* Price Filter */}
+        {/* Price filter */}
         <div className="price-filter">
           <label>Up to ₹{priceRange}</label>
           <input
@@ -81,29 +85,35 @@ function Shop() {
             onChange={(e) => setPriceRange(Number(e.target.value))}
           />
         </div>
-
       </div>
 
-      {/* Product List */}
+      {/* ---------------- PRODUCT GRID ---------------- */}
       <div className="shop-products">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <div className="shop-card" key={product.id}>
-
               <Link to={`/product/${product.id}`}>
                 <img
                   src={product.thumbnail}
                   alt={product.title}
+                  loading="lazy"
                 />
               </Link>
 
               <h4>{product.title}</h4>
+
+              {/* Truncated Description */}
+              <p className="shop-desc">
+                {product.description.length > 60
+                  ? product.description.substring(0, 60) + "..."
+                  : product.description}
+              </p>
+
               <p>₹{product.price}</p>
 
               <button onClick={() => handleAdd(product)}>
                 Add to Cart
               </button>
-
             </div>
           ))
         ) : (

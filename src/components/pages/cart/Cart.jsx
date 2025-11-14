@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { CartContext } from "../../../context/CartContext";
+import { useNavigate } from "react-router-dom";
 import "./Cart.css";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQty } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
@@ -20,16 +22,16 @@ export default function Cart() {
             
             {/* IMAGE FIXED */}
             <img 
-              src={item.thumbnail} 
-              alt={item.title} 
+              src={item.img} 
+              alt={item.name} 
             />
 
             <div className="cart-info">
 
               {/* NAME FIXED */}
-              <h3>{item.title}</h3>
+              <h3>{item.name}</h3>
 
-              {/* PRICE FIXED */}
+              {/* PRICE */}
               <p>₹{item.price}</p>
 
               {/* QUANTITY */}
@@ -47,7 +49,7 @@ export default function Cart() {
                 </button>
               </div>
 
-              {/* REMOVE BUTTON */}
+              {/* REMOVE */}
               <button
                 className="remove-btn"
                 onClick={() => removeFromCart(item.id)}
@@ -66,7 +68,14 @@ export default function Cart() {
 
       <div className="cart-summary">
         <h3>Total Amount: ₹{total}</h3>
-        <button className="checkout-btn">Checkout</button>
+
+        {/* CHECKOUT BUTTON FIXED */}
+        <button 
+          className="checkout-btn"
+          onClick={() => navigate("/checkout")}
+        >
+          Checkout
+        </button>
       </div>
     </div>
   );

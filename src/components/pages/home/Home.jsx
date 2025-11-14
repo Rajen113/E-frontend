@@ -7,9 +7,9 @@ function Home() {
   return (
     <div className="home-container">
 
-      {/* 🌟 Hero Section */}
+      {/* Hero Section */}
       <section className="hero-section">
-        <ImageSlider />   {/* 🖼️ Auto-swiping banner */}
+        <ImageSlider />   {/*  Auto-swiping banner */}
         <div className="hero-overlay">
           <div className="hero-content">
             <h1>Discover the Latest Trends</h1>
@@ -18,67 +18,144 @@ function Home() {
           </div>
         </div>
       </section>
+      <hr />
 
-      {/* 🛍️ Categories */}
+       {/* search category  */}
+      
+          <div class="category-section">
+        <h2 class="side-title">Categories</h2>
+
+        <div class="category-header">
+          <h1>Browse By Category</h1>
+
+          <div class="arrows">
+              <img src="/Left-Arrow.png" class="arrow" alt="left"/>
+              <img src="/Right-Arrow.png" class="arrow" alt="right"/>
+          </div>
+        </div>
+
+        <div class="categories">
+
+          <div class="cat-box">
+            <img src="/Category-CellPhone.png" alt="Phones"/>
+            <p>Phones</p>
+          </div>
+
+          <div class="cat-box">
+            <img src="/Category-Computer.png" alt="Computers"/>
+            <p>Computers</p>
+          </div>
+
+          <div class="cat-box">
+            <img src="/Category-SmartWatch.png" alt="Smartwatch"/>
+            <p>Smartwatch</p>
+          </div>
+
+          <div class="cat-box">
+            <img src="/Category-Camera.png" alt="Camera"/>
+            <p>Camera</p>
+          </div>
+
+          <div class="cat-box">
+            <img src="/Category-Headphone.png" alt="Headphone"/>
+            <p>Headphones</p>
+          </div>
+
+          <div class="cat-box">
+            <img src="/Category-Gamepad.png" alt="Game"/>
+            <p>Games</p>
+          </div>
+
+        </div>
+      </div>
+
+
+      <hr />
+
+      {/* Categories */}
       <section className="category-section">
-        <h2>Shop by Category</h2>
+
+
+        <div class="category-header">
+           <h1>Best Selling Products</h1>
+
+          <div class="All-view">
+              <p>View All</p>
+          </div>
+        </div>
+      
         <div className="categories">
-          <div className="category-card">
-            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=400&q=60" alt="Fashion" />
-            <h3>Fashion</h3>
-          </div>
-          <div className="category-card">
-            <img src="https://images.unsplash.com/photo-1587202372775-98973a8f1d6b?auto=format&fit=crop&w=400&q=60" alt="Electronics" />
-            <h3>Electronics</h3>
-          </div>
-          <div className="category-card">
-            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=60" alt="Home Decor" />
-            <h3>Home Decor</h3>
-          </div>
-          <div className="category-card">
-            <img src="https://images.unsplash.com/photo-1616628188465-0a3b743aa397?auto=format&fit=crop&w=400&q=60" alt="Beauty" />
-            <h3>Beauty</h3>
-          </div>
-        </div>
-      </section>
-
-      {/* 🏷️ Featured Products */}
-      <section className="products-section">
-        <h2>Popular Products</h2>
-        <div className="products">
           <div className="product-card">
-            <img src="https://images.unsplash.com/photo-1593032465171-8a3490cda8c9?auto=format&fit=crop&w=400&q=60" alt="Product" />
-            <h4>Wireless Headphones</h4>
-            <p>₹1,499</p>
-            <button>Add to Cart</button>
+            <img src="/jacket.png" alt="jacket" />
+            <h3>The north coat</h3>
+            <p>$230</p>
+             <button>Add to Cart</button>
           </div>
           <div className="product-card">
-            <img src="https://images.unsplash.com/photo-1606813902914-09e7b5e8e8e0?auto=format&fit=crop&w=400&q=60" alt="Product" />
-            <h4>Smart Watch</h4>
-            <p>₹2,299</p>
-            <button>Add to Cart</button>
+            <img src="/purse.png" alt="purse" />
+            <h3>Gucci duffle bag</h3>
+            <p>$230</p>
+             <button>Add to Cart</button>
           </div>
           <div className="product-card">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=60" alt="Product" />
-            <h4>Casual Sneakers</h4>
-            <p>₹1,999</p>
-            <button>Add to Cart</button>
+            <img src="/gammaxx.png" alt="gammaxx" />
+            <h3>RGB liquid CPU </h3>
+            <p>$230</p>
+             <button>Add to Cart</button>
           </div>
           <div className="product-card">
-            <img src="https://images.unsplash.com/photo-1606813903034-f03e8a32e5f8?auto=format&fit=crop&w=400&q=60" alt="Product" />
-            <h4>Bluetooth Speaker</h4>
-            <p>₹1,299</p>
+            <img src="/table.png" alt="table" />
+            <h3>Small BookSelf</h3>
+            <p>$230</p>
+             <button>Add to Cart</button>
+          </div>
+            <div className="product-card">
+            <img src="/computer.png" alt="computer" />
+            <h3>Computers</h3>
+            <p>$230</p>
             <button>Add to Cart</button>
           </div>
         </div>
       </section>
 
-      {/* 💬 CTA Section */}
-      <section className="cta-section">
-        <h2>Join Our Shopping Community</h2>
-        <p>Get exclusive deals, early access to sales, and more.</p>
-        <Link to="/register" className="cta-btn">Create an Account</Link>
-      </section>
+      <div class="radio-wrapper">
+        <img src="/radio.png" class="radio-full-img" alt="radio"/>
+
+        <button class="buy-btn">Buy Now!</button>
+      </div>
+<hr />
+        <div className="features">
+      <h2>Featured</h2>
+
+      <div className="feature-items">
+        <div className="feature-left">
+          <img src="/playStation .png" alt="playStation" />
+          <button class="buy-btn1">Buy Now!</button>
+        </div>
+
+        <div className="feature-right">
+          <div className="feature-above">
+            <img src="/women-Coll.png" alt="women-collection" />
+              <button class="buy-btn1">Buy Now!</button>
+          </div>
+
+          <div className="feature-below">
+            <div className='speaker'><img src="/Speakers.png" alt="speakers" />
+              <button class="buy-btn1">Buy Now!</button>
+              </div>
+            <div className='perfume'><img src="/perfume.png" alt="perfume" />
+              <button class="buy-btn1">Buy Now!</button>
+              </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+   
 
     </div>
   )
