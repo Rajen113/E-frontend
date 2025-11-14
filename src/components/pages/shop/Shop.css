@@ -112,9 +112,9 @@
   background: #fff;
   border-radius: 12px;
   text-align: center;
-  padding: 12px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
   transition: 0.3s ease;
+  overflow: hidden;
 }
 
 .shop-card:hover {
@@ -136,12 +136,16 @@
 .shop-card h4 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #333;
+  color: lch(21.25% 0 296.81);
   margin: 12px 0 5px;
   height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.2rem;
+}
+
+.shop-desc{
+  color: #1d1919;
 }
 
 /* PRICE */
@@ -150,7 +154,6 @@
   font-weight: 700;
   background: linear-gradient(135deg, #ff6600, #ff8533);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* ADD TO CART BUTTON */

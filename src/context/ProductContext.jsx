@@ -11,6 +11,7 @@ export function ProductProvider({ children }) {
       try {
         const res = await fetch("https://dummyjson.com/products?limit=50000");
         const data = await res.json();
+        console.log(data)
 
         setProducts(data.products);
       } catch (error) {
