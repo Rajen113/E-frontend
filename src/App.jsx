@@ -14,7 +14,12 @@ import Contact from './components/pages/contact/Contact'
 import ProductDetails from './components/pages/product/ProductDetails'
 import Checkout from './components/pages/Checkout/Checkout'
 import OrderSuccess from './components/pages/Checkout/OrderSuccess'
-
+import Admin from './components/admin/pages/dashboard/ Dashboard'
+import AdminLayout from './components/admin/adminLayout/AdminLayout'
+import CreateProduct from './components/admin/pages/products/CreateProduct'
+import ProductList from './components/admin/pages/products/ProductList'
+import CategoryList from './components/admin/pages/category/CategoryList'
+import CreateCategory from './components/admin/pages/category/CreateCategory'
 function App() {
   return (
     <BrowserRouter>
@@ -33,8 +38,17 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails/>} /> 
           <Route path='/checkout' element={<Checkout/>} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/admin" element={<Admin/>} />
 
           </Route>
+
+           <Route element={<AdminLayout/>}>
+           <Route path="/admin/dashboard" element={<Admin/>} />
+           <Route path="/admin/addProduct" element={<CreateProduct />} />
+           <Route path="/admin/productList" element={<ProductList />} />
+           <Route path="/admin/categoryList" element={<CategoryList />} />
+           <Route path="/admin/createcategory" element={<CreateCategory />} />
+           </Route>
       </Routes>
     </BrowserRouter>
   )
