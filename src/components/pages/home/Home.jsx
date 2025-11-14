@@ -18,144 +18,150 @@ function Home() {
           </div>
         </div>
       </section>
+
       <hr />
 
-       {/* search category  */}
-      
-          <div class="category-section">
-        <h2 class="side-title">Categories</h2>
+      {/* category section */}
+      <div className="category-section">
+        <h2 className="side-title">Categories</h2>
 
-        <div class="category-header">
+        <div className="category-header">
           <h1>Browse By Category</h1>
 
-          <div class="arrows">
-              <img src="/Left-Arrow.png" class="arrow" alt="left"/>
-              <img src="/Right-Arrow.png" class="arrow" alt="right"/>
+          <div className="arrows">
+            <img src="/Left-Arrow.png" className="arrow" alt="left" />
+            <img src="/Right-Arrow.png" className="arrow" alt="right" />
           </div>
         </div>
 
-        <div class="categories">
+        <div className="categories">
 
-          <div class="cat-box">
-            <img src="/Category-CellPhone.png" alt="Phones"/>
+          <div className="cat-box">
+            <img src="/Category-CellPhone.png" alt="Phones" />
             <p>Phones</p>
           </div>
 
-          <div class="cat-box">
-            <img src="/Category-Computer.png" alt="Computers"/>
+          <div className="cat-box">
+            <img src="/Category-Computer.png" alt="Computers" />
             <p>Computers</p>
           </div>
 
-          <div class="cat-box">
-            <img src="/Category-SmartWatch.png" alt="Smartwatch"/>
+          <div className="cat-box">
+            <img src="/Category-SmartWatch.png" alt="Smartwatch" />
             <p>Smartwatch</p>
           </div>
 
-          <div class="cat-box">
-            <img src="/Category-Camera.png" alt="Camera"/>
+          <div className="cat-box">
+            <img src="/Category-Camera.png" alt="Camera" />
             <p>Camera</p>
           </div>
 
-          <div class="cat-box">
-            <img src="/Category-Headphone.png" alt="Headphone"/>
+          <div className="cat-box">
+            <img src="/Category-Headphone.png" alt="Headphone" />
             <p>Headphones</p>
           </div>
 
-          <div class="cat-box">
-            <img src="/Category-Gamepad.png" alt="Game"/>
+          <div className="cat-box">
+            <img src="/Category-Gamepad.png" alt="Game" />
             <p>Games</p>
           </div>
 
         </div>
       </div>
 
-
       <hr />
 
-      {/* Categories */}
+      {/* Best Selling */}
       <section className="category-section">
 
+        <div className="category-header">
+          <h1>Best Selling Products</h1>
 
-        <div class="category-header">
-           <h1>Best Selling Products</h1>
-
-          <div class="All-view">
-              <p>View All</p>
+          <div className="All-view">
+            <p>View All</p>
           </div>
         </div>
-      
+
         <div className="categories">
+
           <div className="product-card">
             <img src="/jacket.png" alt="jacket" />
             <h3>The north coat</h3>
             <p>$230</p>
-             <button>Add to Cart</button>
+            <button>Add to Cart</button>
           </div>
+
           <div className="product-card">
             <img src="/purse.png" alt="purse" />
             <h3>Gucci duffle bag</h3>
             <p>$230</p>
-             <button>Add to Cart</button>
+            <button>Add to Cart</button>
           </div>
+
           <div className="product-card">
             <img src="/gammaxx.png" alt="gammaxx" />
-            <h3>RGB liquid CPU </h3>
+            <h3>RGB liquid CPU</h3>
             <p>$230</p>
-             <button>Add to Cart</button>
+            <button>Add to Cart</button>
           </div>
+
           <div className="product-card">
             <img src="/table.png" alt="table" />
             <h3>Small BookSelf</h3>
             <p>$230</p>
-             <button>Add to Cart</button>
+            <button>Add to Cart</button>
           </div>
-            <div className="product-card">
+
+          <div className="product-card">
             <img src="/computer.png" alt="computer" />
             <h3>Computers</h3>
             <p>$230</p>
             <button>Add to Cart</button>
           </div>
+
         </div>
       </section>
 
-      <div class="radio-wrapper">
-        <img src="/radio.png" class="radio-full-img" alt="radio"/>
-
-        <button class="buy-btn">Buy Now!</button>
+      {/* Radio Banner */}
+      <div className="radio-wrapper">
+        <img src="/radio.png" className="radio-full-img" alt="radio" />
+        <button className="buy-btn">Buy Now!</button>
       </div>
-<hr />
-        <div className="features">
-      <h2>Featured</h2>
 
-      <div className="feature-items">
-        <div className="feature-left">
-          <img src="/playStation .png" alt="playStation" />
-          <button class="buy-btn1">Buy Now!</button>
-        </div>
+      <hr />
 
-        <div className="feature-right">
-          <div className="feature-above">
-            <img src="/women-Coll.png" alt="women-collection" />
-              <button class="buy-btn1">Buy Now!</button>
+      {/* Featured Section */}
+      <div className="features">
+        <h2>Featured</h2>
+
+        <div className="feature-items">
+          <div className="feature-left">
+            <img src="/playStation .png" alt="playStation" />
+            <button className="buy-btn1">Buy Now!</button>
           </div>
 
-          <div className="feature-below">
-            <div className='speaker'><img src="/Speakers.png" alt="speakers" />
-              <button class="buy-btn1">Buy Now!</button>
+          <div className="feature-right">
+
+            <div className="feature-above">
+              <img src="/women-Coll.png" alt="women-collection" />
+              <button className="buy-btn1">Buy Now!</button>
+            </div>
+
+            <div className="feature-below">
+              <div className="speaker">
+                <img src="/Speakers.png" alt="speakers" />
+                <button className="buy-btn1">Buy Now!</button>
               </div>
-            <div className='perfume'><img src="/perfume.png" alt="perfume" />
-              <button class="buy-btn1">Buy Now!</button>
+
+              <div className="perfume">
+                <img src="/perfume.png" alt="perfume" />
+                <button className="buy-btn1">Buy Now!</button>
               </div>
+            </div>
+
           </div>
         </div>
-
       </div>
-    </div>
-
-
-
-
-   
 
     </div>
   )
