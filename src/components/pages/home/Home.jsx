@@ -20,7 +20,7 @@ function Home() {
       </section>
 
       {/* 🛍️ Categories */}
-      <section className="category-section">
+      <section className="category-section"> 
         <h2>Shop by Category</h2>
         <div className="categories">
           <div className="category-card">
