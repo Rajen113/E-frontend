@@ -65,7 +65,7 @@ function Register() {
     const userData = {
       name: formData.name,
       email: formData.email,
-      mobile_number: Number(formData.mobile_number),
+      mobile_number:formData.mobile_number,
       password: formData.password,
     };
 
