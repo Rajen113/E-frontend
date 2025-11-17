@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../../api/axiosConfig'
 import './AdminRegister.css'
-import { FaUser, FaLock } from "react-icons/fa"; // from FontAwesome
-import { MdEmail } from "react-icons/md"; // from Material Design
+import { FaUser } from "react-icons/fa"
 
 function AdminRegister() {
   const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,76 +27,187 @@ function AdminRegister() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+  e.preventDefault()
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords don't match!")
+  // Password match
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords don't match!")
+    return
+  }
+
+  // Mobile Number Validation
+  if (!/^[6-9]\d{9}$/.test(formData.mobile_number)) {
+    setError("Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.")
+    return
+  }
+
+  // Government ID validation rules
+  const idValidations = {
+    "Aadhaar": /^\d{12}$/,
+    "Voter ID": /^[A-Z]{3}\d{7}$/,
+    "PAN Card": /^[A-Z]{5}\d{4}[A-Z]$/,
+    "Passport": /^[A-PR-WYa-pr-wy][1-9]\d{6}$/,
+    "Driving License": /^[A-Z]{2}\d{13}$/,
+  }
+
+  // Validate ID Number based on selected ID type
+  if (formData.goverment_id) {
+    const pattern = idValidations[formData.goverment_id]
+    if (!pattern.test(formData.id_proof_path.toUpperCase())) {
+      setError(`Invalid ${formData.goverment_id} number format.`)
       return
-    }
-    if (!/^\d{10}$/.test(formData.mobile_number)) {
-      setError('Enter a valid 10-digit mobile number.')
-      return
-    }
-
-    const adminData = {
-      name: formData.name,
-      email: formData.email,
-      mobile_number: Number(formData.mobile_number),
-      goverment_id: Number(formData.goverment_id),
-      id_proof_path: formData.id_proof_path,
-      gst_number: Number(formData.gst_number),
-      password: formData.password,
-    }
-
-    try {
-      setLoading(true)
-      const res = await axiosInstance.post('/admin/register', adminData)
-      alert(res.data.message || 'Admin registration successful!')
-      navigate('/login')
-    } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed!')
-    } finally {
-      setLoading(false)
     }
   }
 
+  const adminData = {
+    name: formData.name,
+    email: formData.email,
+    mobile_number: Number(formData.mobile_number),
+    goverment_id: formData.goverment_id,
+    id_proof_path: formData.id_proof_path,
+    gst_number: Number(formData.gst_number),
+    password: formData.password,
+  }
+
+  try {
+    setLoading(true)
+    const res = await axiosInstance.post('/admin/register', adminData)
+    alert(res.data.message || 'Admin registration successful!')
+    navigate('/login')
+  } catch (err) {
+    setError(err.response?.data?.message || 'Registration failed!')
+  } finally {
+    setLoading(false)
+  }
+}
+
+
   return (
     <div className="register-wrapper">
+
+      {/* Left Side Image */}
       <div className="register-left">
         <img src="/login.png" alt="Register Illustration" />
-
       </div>
-        <div className="register-right">
-       <div className='register-form'>
-        <h2><FaUser />Admin Registration</h2>
-       
-        <form onSubmit={handleSubmit}>
-          {error && <p className="error-text">{error}</p>}
-          <div className='field-box'>
-<div className='fields'>
-          <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
-          <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-          <input type="text" name="mobile_number" placeholder="Mobile Number" value={formData.mobile_number} onChange={handleChange} required />
-          <input type="number" name="goverment_id" placeholder="Government ID" value={formData.goverment_id} onChange={handleChange} required /></div>
-       <div className='fields'>  <input type="text" name="id_proof_path" placeholder="ID Proof Path" value={formData.id_proof_path} onChange={handleChange} required />
-          <input type="number" name="gst_number" placeholder="GST Number" value={formData.gst_number} onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-          <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required /></div> 
-</div>
-          <button type="submit" className="register-btn" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
-          </button>
 
-        </form>
-        <div className="divider">or</div>
+      {/* Right Side Form */}
+      <div className="register-right">
+        <div className="register-form">
 
-        
+          <h2><FaUser /> Admin Registration</h2>
+
+          <form onSubmit={handleSubmit}>
+            {error && <p className="error-text">{error}</p>}
+
+            <div className="field-box">
+
+              {/* LEFT COLUMN */}
+              <div className="fields">
+
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="text"
+                  name="mobile_number"
+                  placeholder="Mobile Number"
+                  value={formData.mobile_number}
+                  onChange={handleChange}
+                  required
+                />
+
+                {/* ▼ Government ID Dropdown */}
+                <select
+                  name="goverment_id"
+                  value={formData.goverment_id}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Government ID</option>
+                  <option value="Aadhaar Card">Aadhaar</option>
+                  <option value="Voter ID">Voter ID</option>
+                  <option value="PAN Card">PAN Card</option>
+                  <option value="Passport">Passport</option>
+                  <option value="Driving License">Driving License</option>
+                </select>
+
+              </div>
+
+              {/* RIGHT COLUMN */}
+              <div className="fields">
+
+                {/* ID Number Field */}
+                <input
+                  type="text"
+                  name="id_proof_path"
+                  placeholder={`${formData.goverment_id || ""} Number`}
+                  value={formData.id_proof_path}
+                  onChange={handleChange}
+                  required
+                />
+
+
+
+                <input
+                  type="number"
+                  name="gst_number"
+                  placeholder="GST Number"
+                  value={formData.gst_number}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+            </div>
+
+            <button type="submit" className="register-btn" disabled={loading}>
+              {loading ? 'Registering...' : 'Register'}
+            </button>
+          </form>
+
+          <div className="divider">or</div>
+
           <p className="login-text">
             Already have an account? <Link to="/login">Login</Link>
           </p>
-        
+
         </div>
       </div>
+
     </div>
   )
 }

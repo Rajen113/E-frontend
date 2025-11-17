@@ -89,7 +89,7 @@
   text-align: center;
  
 }
-.register-form input{
+.register-form input,select{
 
   width: 100%;
   padding: 12px 10px;
@@ -161,5 +161,30 @@
 
 .login-text a:hover {
   text-decoration: underline;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  color: #666;
+}
+
+input[type="file"] {
+  padding: 8px;
+  background: #fff;
 }
 
