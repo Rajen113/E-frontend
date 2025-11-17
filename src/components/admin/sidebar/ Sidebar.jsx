@@ -15,6 +15,7 @@ import "./Sidebar.css";
 function Sidebar() {
   const [openProduct, setOpenProduct] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
+  const [openOrder, setOpenOrder] = useState(false);
 
   return (
     <div className="sidebar">
@@ -38,6 +39,7 @@ function Sidebar() {
           <ul className="submenu">
             <li><Link to="/admin/addProduct">Create Product</Link></li>
             <li><Link to="/admin/productList">Product List</Link></li>
+             <li><Link to="/admin/editProduct">Edit Product</Link></li>
           </ul>
         )}
 
@@ -51,12 +53,27 @@ function Sidebar() {
           <ul className="submenu">
             <li><Link to="/admin/createcategory">Create Category</Link></li>
             <li><Link to="/admin/categoryList">Category List</Link></li>
+            <li><Link to="/admin/editCategory">Edit Category</Link></li>
           </ul>
         )}
 
         
         <li><FaUsers /> <span>Users</span></li>
-        <li><FaShoppingCart /> <span>Orders</span></li>
+
+
+        <li className="dropdown" onClick={() => setOpenOrder(!openOrder)}>
+          <FaShoppingCart /> 
+          <span>Orders</span>
+          {openOrder ? <FaChevronUp className="arrow" /> : <FaChevronDown className="arrow" />}
+        </li>
+
+        {openOrder && (
+          <ul className="submenu">
+           
+            <li><Link to="/admin/orderList">Order List</Link></li>
+          </ul>
+        )}
+      
       </ul>
 
       <div className="logout">

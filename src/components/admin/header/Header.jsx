@@ -2,7 +2,7 @@ import React from "react";
 import { FaSearch, FaBell,FaUser} from "react-icons/fa";
 import { MdEmail } from "react-icons/md"; // from Material Design
 import "./Header.css";
-import { FaU } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 function Header() {
   return (
     <div className="header">
@@ -20,7 +20,7 @@ function Header() {
       <div className="header-right">
         <FaBell className="icon" />
         <MdEmail className="icon" />
-        <FaUser className="icon" />
+       <Link to="/admin/profile"> <FaUser className="icon" /></Link>
       </div>
     </div>
   );

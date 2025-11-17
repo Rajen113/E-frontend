@@ -44,10 +44,10 @@ function Login() {
 
     const token = res.data.access_token;
 
-    // SAVE TOKEN IN LOCAL STORAGE
+   
     localStorage.setItem("authToken", token);
 
-    // If you are using AuthContext
+  
     login(token);
 
     setSuccess("Login successful! Redirecting...");
@@ -77,10 +77,10 @@ function Login() {
             {error && <p className="error-text">{error}</p>}
             {success && <p className="success-text">{success}</p>}
 
-            {/* FRONTEND STILL SENDS username, but user sees Email */}
+        
             <input
               type="email"
-              name="username"      // DO NOT CHANGE
+              name="username"      
               placeholder="Email"
               value={formData.username}
               onChange={handleChange}
