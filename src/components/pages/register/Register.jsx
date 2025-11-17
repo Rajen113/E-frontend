@@ -73,9 +73,9 @@ function Register() {
   return (
     <div className="signup-page">
       <div className="img-signup">
-        {/* <div className="left-img"> */}
+       
           <img src="SideImage.png" alt="Register Illustration" />
-        {/* </div> */}
+
       </div>
 
       <div className="signup-container">
