@@ -20,6 +20,10 @@ import CreateProduct from './components/admin/pages/products/CreateProduct'
 import ProductList from './components/admin/pages/products/ProductList'
 import CategoryList from './components/admin/pages/category/CategoryList'
 import CreateCategory from './components/admin/pages/category/CreateCategory'
+import OrderList from './components/admin/pages/Order/OrderList/OrderList'  
+import EditCategory from './components/admin/pages/category/EditCategory'
+import EditProduct from './components/admin/pages/products/EditProduct'
+import AdminProfile from './components/admin/adminProfile/AdminProfile'
 function App() {
   return (
     <BrowserRouter>
@@ -38,8 +42,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails/>} /> 
           <Route path='/checkout' element={<Checkout/>} />
           <Route path="/order-success" element={<OrderSuccess />} />
-          <Route path="/admin" element={<Admin/>} />
-
+    
           </Route>
 
            <Route element={<AdminLayout/>}>
@@ -48,6 +51,12 @@ function App() {
            <Route path="/admin/productList" element={<ProductList />} />
            <Route path="/admin/categoryList" element={<CategoryList />} />
            <Route path="/admin/createcategory" element={<CreateCategory />} />
+            <Route path="/admin/orderList" element={<OrderList />} />
+            <Route path="/admin/editCategory" element={<EditCategory />} />
+            <Route path="/admin/editProduct" element={<EditProduct />} />
+             <Route path="/admin/profile" element={<AdminProfile />} />
+            
+
            </Route>
       </Routes>
     </BrowserRouter>
