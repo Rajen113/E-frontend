@@ -31,7 +31,7 @@ function Shop() {
     description: p.description,
   }));
 
-  /* Filters */
+ 
   const filteredProducts = transformedProducts.filter((p) => {
     const matchCategory =
       selectedCategory === "All" || p.category === selectedCategory;

@@ -55,7 +55,7 @@ function ProductList() {
               <td>{p.quantity}</td>
               <td>₹{p.price}</td>
               <td>
-                <button className="edit-btn">Edit</button>
+                <button className="edit-btn"><Link to="/admin/editProduct">Edit</Link></button>
                 <button className="delete-btn">Delete</button>
               </td>
             </tr>

@@ -122,7 +122,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Radio Banner */}
+  
       <div className="radio-wrapper">
         <img src="/radio.png" className="radio-full-img" alt="radio" />
         <button className="buy-btn">Buy Now!</button>
@@ -130,7 +130,7 @@ function Home() {
 
       <hr />
 
-      {/* Featured Section */}
+     
       <div className="features">
         <h2>Featured</h2>
 

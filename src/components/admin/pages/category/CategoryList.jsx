@@ -40,7 +40,7 @@ function CategoryList() {
               <td>{c.name}</td>
               <td>{c.description}</td>
               <td>
-                <button className="edit-btn">Edit</button>
+                <button className="edit-btn"><Link to="/admin/editCategory">Edit</Link></button>
                 <button className="delete-btn">Delete</button>
               </td>
             </tr>
