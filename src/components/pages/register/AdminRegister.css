@@ -71,6 +71,7 @@
   color: #333;
   text-align: center;
 }
+.register-form input,select{
 
 .field-box {
   display: flex;
@@ -162,66 +163,28 @@
   text-decoration: underline;
 }
 
-
-
-/* Tablets & small laptops */
-@media (max-width: 992px) {
-  .register-wrapper {
-    flex-direction: column;
-    width: 95%;
-  }
-
-  .register-left {
-    width: 60%;
-    margin-bottom: 20px;
-  }
-
-  .field-box {
-    flex-direction: column;
-    gap: 0;
-  }
+.password-wrapper {
+  position: relative;
+  width: 100%;
 }
 
-/* Tablets */
-@media (max-width: 768px) {
-  .register-left {
-    width: 70%;
-  }
-
-  .register-form {
-    padding: 20px 25px;
-  }
-
-  .register-form h2 {
-    font-size: 22px;
-  }
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
 }
 
-/* Mobile */
-@media (max-width: 600px) {
-  .register-wrapper {
-    width: 100%;
-    gap: 10px;
-  }
-
-  .register-left {
-    width: 90%;
-  }
-
-  .register-form {
-    padding: 18px 20px;
-  }
-
-  .register-form input {
-    padding: 10px;
-    font-size: 13px;
-  }
-
-  .register-btn {
-    padding: 10px;
-    font-size: 14px;
-  }
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  color: #666;
 }
 
-
+input[type="file"] {
+  padding: 8px;
+  background: #fff;
+}
 
