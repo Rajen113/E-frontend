@@ -1,70 +1,51 @@
-import React, { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import axiosInstance from '../../../api/axiosConfig'
-import { AuthContext } from '../../../context/AuthContext'
-import './Login.css'
-import { FaUser, FaLock } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthContext";
+import { loginService } from "../../../services/auth.service";
+import "./Login.css";
+import { FaUser } from "react-icons/fa";
 
 function Login() {
-  const navigate = useNavigate()
-  const { login } = useContext(AuthContext)
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  })
+    username: "",
+    password: "",
+  });
 
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-    setError('')
-    setSuccess('')
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError("");
+    setSuccess("");
+  };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  // prepare form data for FastAPI Form(...)
-  const data = new FormData();
-  data.append("username", formData.username);
-  data.append("password", formData.password);
-
-  try {
+    e.preventDefault();
     setLoading(true);
 
-    const res = await axiosInstance.post('/user/login', data, {
-      headers: {
-        "Content-Type": "multipart/form-data"
-      }
-    });
+    const response = await loginService(formData);
+    console.log(response)
 
-    const token = res.data.access_token;
+    setLoading(false);
 
-   
-    localStorage.setItem("authToken", token);
+    if (!response.success) {
+      setError(response.message);
+      return;
+    }
 
-  
-    login(token);
+    login(response.token);
 
     setSuccess("Login successful! Redirecting...");
-
     setTimeout(() => navigate("/"), 1500);
-
-  } catch (err) {
-    setError(err.response?.data?.message || "Invalid credentials!");
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="login-page">
-
       <div className="img-login">
         <img src="/register.png" alt="login Illustration" />
       </div>
@@ -77,10 +58,9 @@ function Login() {
             {error && <p className="error-text">{error}</p>}
             {success && <p className="success-text">{success}</p>}
 
-        
             <input
               type="email"
-              name="username"      
+              name="username"
               placeholder="Email"
               value={formData.username}
               onChange={handleChange}
@@ -97,21 +77,20 @@ function Login() {
             />
 
             <button type="submit" className="create-btn" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? "Logging in..." : "Login"}
             </button>
 
             <div className="divider">or</div>
 
             <p className="login-link">
-              Don’t have an account? <Link to="/register"><FaUser /> Register</Link>
+              Don’t have an account?{" "}
+              <Link to="/register"><FaUser /> Register</Link>
             </p>
           </form>
-
         </div>
       </div>
-
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
