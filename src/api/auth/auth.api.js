@@ -1,8 +1,8 @@
-import axiosInstance from "../axiosConfig";
+import { authAPI } from "../instances";
 
 export const loginAPI = (formData) =>
-  axiosInstance.post("/user/login", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+    authAPI.post("/user/login", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
