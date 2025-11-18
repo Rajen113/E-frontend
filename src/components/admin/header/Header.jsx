@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../../context/AuthContext';
 
 function Header() {
-  const { isAdminLoggedIn, adminLogout } = useContext(AuthContext);
+  const [isLoggedIn, setIsLoggedIn] = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleAdminLogout = () => {
