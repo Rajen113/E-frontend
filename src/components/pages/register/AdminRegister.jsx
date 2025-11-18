@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axiosInstance from '../../../api/axiosConfig'
 import './AdminRegister.css'
 import { FaUser } from "react-icons/fa"
+import { adminRegisterService } from '../../../services/admin.service'
 
 function AdminRegister() {
   const navigate = useNavigate()
@@ -21,7 +21,6 @@ function AdminRegister() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  // Government ID validation patterns
   const idValidations = {
     "Aadhaar": /^\d{12}$/,
     "Voter ID": /^[A-Z]{3}\d{7}$/,
@@ -38,19 +37,16 @@ function AdminRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Password Match Check
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords don't match!")
       return
     }
 
-    // Mobile Number Validation
     if (!/^[6-9]\d{9}$/.test(formData.mobile_number)) {
-      setError("Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.")
+      setError("Enter a valid 10-digit mobile number starting with 6–9.")
       return
     }
 
-    // Validate ID number format
     if (formData.goverment_id) {
       const pattern = idValidations[formData.goverment_id]
       if (!pattern.test(formData.id_number.toUpperCase())) {
@@ -59,7 +55,6 @@ function AdminRegister() {
       }
     }
 
-    // Data payload as per API requirement
     const adminData = {
       name: formData.name,
       email: formData.email,
@@ -70,27 +65,29 @@ function AdminRegister() {
       password: formData.password,
     }
 
-    try {
-      setLoading(true)
-      const res = await axiosInstance.post('/admin/register', adminData)
-      alert(res.data.message || 'Admin registration successful!')
-      navigate('/login')
-    } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed!')
-    } finally {
-      setLoading(false)
+    setLoading(true)
+
+    // Service Call
+    const response = await adminRegisterService(adminData)
+
+    setLoading(false)
+
+    if (!response.success) {
+      setError(response.message)
+      return
     }
+
+    alert(response.message)
+    navigate('/login')
   }
 
   return (
     <div className="register-wrapper">
 
-      {/* Left Side Image */}
       <div className="register-left">
         <img src="/login.png" alt="Register Illustration" />
       </div>
 
-      {/* Right Side Form */}
       <div className="register-right">
         <div className="register-form">
 
@@ -130,7 +127,6 @@ function AdminRegister() {
                   required
                 />
 
-                {/* Government ID Dropdown */}
                 <select
                   name="goverment_id"
                   value={formData.goverment_id}
@@ -148,7 +144,6 @@ function AdminRegister() {
 
               {/* RIGHT COLUMN */}
               <div className="fields">
-
                 <input
                   type="text"
                   name="id_number"

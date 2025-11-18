@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../../api/axiosConfig";
 import "./Register.css";
-import { FaUser, FaLock } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
+import { registerService } from "../../../services/auth.service";
 
 function Register() {
   const navigate = useNavigate();
@@ -26,10 +25,10 @@ function Register() {
     setSuccess("");
   };
 
-  // ⭐ VALIDATION FUNCTION
+  //FORM VALIDATION
   const validateFields = () => {
     if (!/^[A-Za-z ]{3,}$/.test(formData.name))
-      return "Full Name must be at least 3 characters and contain only letters.";
+      return "Full Name must be at least 3 characters and only contain letters.";
 
     if (!/^\S+@\S+\.\S+$/.test(formData.email))
       return "Invalid email format.";
@@ -40,12 +39,6 @@ function Register() {
     if (formData.password.length < 6)
       return "Password must be at least 6 characters.";
 
-    // if (!/[A-Z]/.test(formData.password))
-    //   return "Password must contain at least 1 uppercase letter.";
-
-    // if (!/[0-9]/.test(formData.password))
-    //   return "Password must contain at least 1 number.";
-
     if (formData.password !== formData.confirmPassword)
       return "Passwords do not match.";
 
@@ -55,7 +48,6 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Run validation
     const validationError = validateFields();
     if (validationError) {
       setError(validationError);
@@ -65,26 +57,26 @@ function Register() {
     const userData = {
       name: formData.name,
       email: formData.email,
-      mobile_number:formData.mobile_number,
+      mobile_number: formData.mobile_number,
       password: formData.password,
     };
 
-    try {
-      setLoading(true);
-      const res = await axiosInstance.post("/user/register", userData);
+    setLoading(true);
 
-      setSuccess(res.data.message || "Registration successful!");
-      setError("");
+    const response = await registerService(userData);
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    } catch (err) {
-      setError(err.response?.data?.detail || "Registration failed!");
-      setSuccess("");
-    } finally {
-      setLoading(false);
+    setLoading(false);
+
+    if (!response.success) {
+      setError(response.message);
+      return;
     }
+
+    setSuccess(response.message);
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 1500);
   };
 
   return (
