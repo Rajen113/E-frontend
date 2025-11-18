@@ -17,21 +17,22 @@ function Shop() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [priceRange, setPriceRange] = useState(3000);
+  const [priceRange, setPriceRange] = useState(10000);
 
   if (loading) return <h2 className="loading">Loading products...</h2>;
 
-  /* Transform DummyJSON API data */
+  /* ---------------- Transform Backend API Data ---------------- */
   const transformedProducts = products.map((p) => ({
     id: p.id,
-    title: p.title,
-    price: Math.round(p.price * 80),
-    category: p.category,
-    thumbnail: p.thumbnail,
+    title: p.name,
+    price: p.price,
+    category: p.category?.category,
+    img: `${import.meta.env.VITE_PRODUCT_URL}/${p.image_path[0]}`,
     description: p.description,
+    stock: p.quantity,
   }));
 
- 
+  /* ---------------- Filtering Logic ---------------- */
   const filteredProducts = transformedProducts.filter((p) => {
     const matchCategory =
       selectedCategory === "All" || p.category === selectedCategory;
@@ -41,18 +42,30 @@ function Shop() {
     return matchCategory && matchPrice;
   });
 
-  /* Add to cart */
+  /* ---------------- Add to Cart ---------------- */
   const handleAdd = (product) => {
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
-    addToCart(product);
+
+    addToCart({
+      id: product.id,
+      name: product.title,
+      price: product.price,
+      img: `${import.meta.env.VITE_PRODUCT_URL}/${p.image_path[0]}`,
+
+      qty: 1,
+    });
+
     showToast("Product added to cart!");
   };
 
-  /* All categories */
-  const categories = ["All", ...new Set(products.map((p) => p.category))];
+  /* ---------------- Collect Unique Categories ---------------- */
+  const categories = [
+    "All",
+    ...new Set(transformedProducts.map((p) => p.category)),
+  ];
 
   return (
     <div className="shop-container">
@@ -79,8 +92,8 @@ function Shop() {
           <input
             type="range"
             min="500"
-            max="3000"
-            step="100"
+            max="10000"
+            step="500"
             value={priceRange}
             onChange={(e) => setPriceRange(Number(e.target.value))}
           />
@@ -94,7 +107,7 @@ function Shop() {
             <div className="shop-card" key={product.id}>
               <Link to={`/product/${product.id}`}>
                 <img
-                  src={product.thumbnail}
+                  src={product.img}
                   alt={product.title}
                   loading="lazy"
                 />

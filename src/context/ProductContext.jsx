@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { productAPI } from "../api/instances"; 
 
 export const ProductContext = createContext();
 
@@ -9,13 +10,11 @@ export function ProductProvider({ children }) {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("https://dummyjson.com/products?limit=50000");
-        const data = await res.json();
-        console.log(data)
-
-        setProducts(data.products);
+        const res = await productAPI.get("/api/get_products/");
+        console.log(res.data)
+        setProducts(res.data);
       } catch (error) {
-        console.log(error);
+        console.log("Product Load Error:", error);
       } finally {
         setLoading(false);
       }
