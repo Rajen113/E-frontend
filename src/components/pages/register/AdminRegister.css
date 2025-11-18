@@ -72,16 +72,26 @@
   color: #333;
   text-align: center;
 }
-.register-form input,select{
+<<<<<<<<< Temporary merge branch 1
+.register-form input{
 
+=========
+
+/* TWO-COLUMN FIELD BOX */
 .field-box {
   display: flex;
   justify-content: space-between;
   gap: 25px;
 }
-.register-form input{
 
-.register-form input {
+.fields {
+  width: 100%;
+}
+
+/* INPUT FIELDS */
+.register-form input,
+.register-form select {
+>>>>>>>>> Temporary merge branch 2
   width: 100%;
   padding: 12px 10px;
   margin: 8px 0;
@@ -164,6 +174,9 @@
   text-decoration: underline;
 }
 
+<<<<<<<<< Temporary merge branch 1
+=========
+/* PASSWORD WRAPPER */
 .password-wrapper {
   position: relative;
   width: 100%;
@@ -184,6 +197,7 @@
   color: #666;
 }
 
+/* FILE INPUT */
 input[type="file"] {
   padding: 8px;
   background: #fff;
@@ -214,3 +228,4 @@ input[type="file"] {
     padding: 20px;
   }
 }
+>>>>>>>>> Temporary merge branch 2
