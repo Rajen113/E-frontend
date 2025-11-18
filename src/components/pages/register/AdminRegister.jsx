@@ -12,7 +12,7 @@ function AdminRegister() {
     email: '',
     mobile_number: '',
     goverment_id: '',
-    id_proof_path: '',
+    id_number: '',
     gst_number: '',
     password: '',
     confirmPassword: '',
@@ -21,27 +21,7 @@ function AdminRegister() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-    setError('')
-  }
-
-  const handleSubmit = async (e) => {
-  e.preventDefault()
-
-  // Password match
-  if (formData.password !== formData.confirmPassword) {
-    setError("Passwords don't match!")
-    return
-  }
-
-  // Mobile Number Validation
-  if (!/^[6-9]\d{9}$/.test(formData.mobile_number)) {
-    setError("Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.")
-    return
-  }
-
-  // Government ID validation rules
+  // Government ID validation patterns
   const idValidations = {
     "Aadhaar": /^\d{12}$/,
     "Voter ID": /^[A-Z]{3}\d{7}$/,
@@ -50,37 +30,57 @@ function AdminRegister() {
     "Driving License": /^[A-Z]{2}\d{13}$/,
   }
 
-  // Validate ID Number based on selected ID type
-  if (formData.goverment_id) {
-    const pattern = idValidations[formData.goverment_id]
-    if (!pattern.test(formData.id_proof_path.toUpperCase())) {
-      setError(`Invalid ${formData.goverment_id} number format.`)
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+    setError('')
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    // Password Match Check
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords don't match!")
       return
     }
-  }
 
-  const adminData = {
-    name: formData.name,
-    email: formData.email,
-    mobile_number: Number(formData.mobile_number),
-    goverment_id: formData.goverment_id,
-    id_proof_path: formData.id_proof_path,
-    gst_number: Number(formData.gst_number),
-    password: formData.password,
-  }
+    // Mobile Number Validation
+    if (!/^[6-9]\d{9}$/.test(formData.mobile_number)) {
+      setError("Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.")
+      return
+    }
 
-  try {
-    setLoading(true)
-    const res = await axiosInstance.post('/admin/register', adminData)
-    alert(res.data.message || 'Admin registration successful!')
-    navigate('/login')
-  } catch (err) {
-    setError(err.response?.data?.message || 'Registration failed!')
-  } finally {
-    setLoading(false)
-  }
-}
+    // Validate ID number format
+    if (formData.goverment_id) {
+      const pattern = idValidations[formData.goverment_id]
+      if (!pattern.test(formData.id_number.toUpperCase())) {
+        setError(`Invalid ${formData.goverment_id} number format.`)
+        return
+      }
+    }
 
+    // Data payload as per API requirement
+    const adminData = {
+      name: formData.name,
+      email: formData.email,
+      mobile_number: formData.mobile_number,
+      goverment_id: formData.goverment_id,
+      id_number: formData.id_number,
+      gst_number: formData.gst_number,
+      password: formData.password,
+    }
+
+    try {
+      setLoading(true)
+      const res = await axiosInstance.post('/admin/register', adminData)
+      alert(res.data.message || 'Admin registration successful!')
+      navigate('/login')
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed!')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="register-wrapper">
@@ -103,7 +103,6 @@ function AdminRegister() {
 
               {/* LEFT COLUMN */}
               <div className="fields">
-
                 <input
                   type="text"
                   name="name"
@@ -131,7 +130,7 @@ function AdminRegister() {
                   required
                 />
 
-                {/* ▼ Government ID Dropdown */}
+                {/* Government ID Dropdown */}
                 <select
                   name="goverment_id"
                   value={formData.goverment_id}
@@ -139,32 +138,28 @@ function AdminRegister() {
                   required
                 >
                   <option value="">Select Government ID</option>
-                  <option value="Aadhaar Card">Aadhaar</option>
+                  <option value="Aadhaar">Aadhaar</option>
                   <option value="Voter ID">Voter ID</option>
                   <option value="PAN Card">PAN Card</option>
                   <option value="Passport">Passport</option>
                   <option value="Driving License">Driving License</option>
                 </select>
-
               </div>
 
               {/* RIGHT COLUMN */}
               <div className="fields">
 
-                {/* ID Number Field */}
                 <input
                   type="text"
-                  name="id_proof_path"
+                  name="id_number"
                   placeholder={`${formData.goverment_id || ""} Number`}
-                  value={formData.id_proof_path}
+                  value={formData.id_number}
                   onChange={handleChange}
                   required
                 />
 
-
-
                 <input
-                  type="number"
+                  type="text"
                   name="gst_number"
                   placeholder="GST Number"
                   value={formData.gst_number}
@@ -189,9 +184,7 @@ function AdminRegister() {
                   onChange={handleChange}
                   required
                 />
-
               </div>
-
             </div>
 
             <button type="submit" className="register-btn" disabled={loading}>
