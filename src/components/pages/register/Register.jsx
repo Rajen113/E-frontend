@@ -73,6 +73,8 @@ function Register() {
       setLoading(true);
       const res = await axiosInstance.post("/user/register", userData);
 
+      console.log(res.data)
+
       setSuccess(res.data.message || "Registration successful!");
       setError("");
 
@@ -90,7 +92,9 @@ function Register() {
   return (
     <div className="signup-page">
       <div className="img-signup">
-        <img src="SideImage.png" alt="Register Illustration" />
+        {/* <div className="left-img"> */}
+          <img src="SideImage.png" alt="Register Illustration" />
+        {/* </div> */}
       </div>
 
       <div className="signup-container">
