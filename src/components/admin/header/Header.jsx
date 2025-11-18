@@ -6,11 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../../context/AuthContext';
 
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useContext(AuthContext);
+ const { isLoggedIn, logout } = useContext(AuthContext)
   const navigate = useNavigate();
 
-  const handleAdminLogout = () => {
-    adminLogout(); 
+  const handleLogout = () => {
+    logout()
     navigate("/admin/login");
   };
 
@@ -33,7 +33,7 @@ function Header() {
       {/* RIGHT SIDE SECTION */}
       <div className="header-right">
 
-        {isAdminLoggedIn ? (
+        {isLoggedIn ? (
           <>
             {/* Show when ADMIN is logged in */}
             <FaBell className="icon" />
@@ -43,7 +43,7 @@ function Header() {
               <FaUser className="icon" />
             </Link>
 
-            <button onClick={handleAdminLogout} className="logout-btn">
+            <button onClick={handleLogout} className="logout-btn">
               Logout
             </button>
           </>
