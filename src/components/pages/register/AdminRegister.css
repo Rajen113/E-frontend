@@ -71,22 +71,10 @@
   margin-bottom: 15px;
   color: #333;
   text-align: center;
+ 
 }
+.register-form input{
 
-/* TWO-COLUMN FIELD BOX */
-.field-box {
-  display: flex;
-  justify-content: space-between;
-  gap: 25px;
-}
-
-.fields {
-  width: 100%;
-}
-
-/* INPUT FIELDS */
-.register-form input,
-.register-form select {
   width: 100%;
   padding: 12px 10px;
   margin: 8px 0;
@@ -169,55 +157,3 @@
   text-decoration: underline;
 }
 
-/* PASSWORD WRAPPER */
-.password-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.password-wrapper input {
-  width: 100%;
-  padding-right: 40px;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  font-size: 20px;
-  color: #666;
-}
-
-/* FILE INPUT */
-input[type="file"] {
-  padding: 8px;
-  background: #fff;
-}
-
-/* RESPONSIVE DESIGN */
-@media (max-width: 950px) {
-  .register-wrapper {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .register-left {
-    width: 65%;
-  }
-
-  .field-box {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 600px) {
-  .register-left {
-    width: 80%;
-  }
-
-  .register-form {
-    padding: 20px;
-  }
-}
