@@ -58,8 +58,6 @@ function App() {
            <Route path="/admin/editProduct/:id" element={<EditProduct />} />
            <Route path="/admin/editCategory/:id" element={<EditCategory />} />
 
-            
-
            </Route>
       </Routes>
     </BrowserRouter>
