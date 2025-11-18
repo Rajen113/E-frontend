@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/axiosConfig";
 import "./Register.css";
-import { FaUser, FaLock } from "react-icons/fa"; // from FontAwesome
-import { MdEmail } from "react-icons/md"; // from Material Design
-
+import { FaUser, FaLock } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 function Register() {
   const navigate = useNavigate();
@@ -27,24 +26,46 @@ function Register() {
     setSuccess("");
   };
 
+  // ⭐ VALIDATION FUNCTION
+  const validateFields = () => {
+    if (!/^[A-Za-z ]{3,}$/.test(formData.name))
+      return "Full Name must be at least 3 characters and contain only letters.";
+
+    if (!/^\S+@\S+\.\S+$/.test(formData.email))
+      return "Invalid email format.";
+
+    if (!/^\d{10}$/.test(formData.mobile_number))
+      return "Enter a valid 10-digit mobile number.";
+
+    if (formData.password.length < 6)
+      return "Password must be at least 6 characters.";
+
+    // if (!/[A-Z]/.test(formData.password))
+    //   return "Password must contain at least 1 uppercase letter.";
+
+    // if (!/[0-9]/.test(formData.password))
+    //   return "Password must contain at least 1 number.";
+
+    if (formData.password !== formData.confirmPassword)
+      return "Passwords do not match.";
+
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic Validation
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords don't match!");
-      return;
-    }
-
-    if (!/^\d{10}$/.test(formData.mobile_number)) {
-      setError("Enter a valid 10-digit mobile number.");
+    // Run validation
+    const validationError = validateFields();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     const userData = {
       name: formData.name,
       email: formData.email,
-      mobile_number: Number(formData.mobile_number),
+      mobile_number:formData.mobile_number,
       password: formData.password,
     };
 
@@ -52,17 +73,15 @@ function Register() {
       setLoading(true);
       const res = await axiosInstance.post("/user/register", userData);
 
-    
       console.log(res.data)
+
       setSuccess(res.data.message || "Registration successful!");
       setError("");
 
-     
       setTimeout(() => {
         navigate("/login");
       }, 1500);
     } catch (err) {
-        console.log(err.response?.data.detail)
       setError(err.response?.data?.detail || "Registration failed!");
       setSuccess("");
     } finally {
@@ -73,15 +92,15 @@ function Register() {
   return (
     <div className="signup-page">
       <div className="img-signup">
-       
+        {/* <div className="left-img"> */}
           <img src="SideImage.png" alt="Register Illustration" />
-
+        {/* </div> */}
       </div>
 
       <div className="signup-container">
         <div className="signup-box">
-            <h2><FaUser />User Registration</h2>
-        
+          <h2><FaUser /> User Registration</h2>
+
           <form onSubmit={handleSubmit}>
             {error && <p className="error-text">{error}</p>}
             {success && <p className="success-text">{success}</p>}
@@ -94,6 +113,7 @@ function Register() {
               onChange={handleChange}
               required
             />
+
             <input
               type="email"
               name="email"
@@ -102,6 +122,7 @@ function Register() {
               onChange={handleChange}
               required
             />
+
             <input
               type="text"
               name="mobile_number"
@@ -110,6 +131,7 @@ function Register() {
               onChange={handleChange}
               required
             />
+
             <input
               type="password"
               name="password"
@@ -118,6 +140,7 @@ function Register() {
               onChange={handleChange}
               required
             />
+
             <input
               type="password"
               name="confirmPassword"
