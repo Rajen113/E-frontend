@@ -1,9 +1,13 @@
 import { loginAPI } from "../api/auth/auth.api";
 import { registerAPI } from "../api/auth/register.api";
 
-export const loginService = async (formData) => {
+export const loginService = async ({ username, password }) => {
   try {
-    const res = await loginAPI(formData);
+    const data = new FormData();
+    data.append("username", username);
+    data.append("password", password);
+
+    const res = await loginAPI(data);
     console.log(res)
 
     const token = res.data?.access_token;

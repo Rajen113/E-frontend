@@ -1,56 +1,61 @@
-import React, { useContext, useState, useEffect } from 'react'
-import axiosInstance from '../../../api/axiosConfig'
-import { AuthContext } from '../../../context/AuthContext'
-import './Profile.css'
+import React, { useContext, useState, useEffect } from 'react';
+import { authAPI } from '../../../api/instances';
+import { AuthContext } from '../../../context/AuthContext';
+import './Profile.css';
 
 export default function Profile() {
-  const { user, setUser } = useContext(AuthContext)
-  const [editMode, setEditMode] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const { user, setUser } = useContext(AuthContext);
+  const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     mobile: ''
-  })
+  });
 
   // 🔥 Fetch user profile from backend
   useEffect(() => {
-    const token = localStorage.getItem('authToken')
-    if (!token) return
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-    axiosInstance
-      axiosInstance.get(`/api/user_profile?token=${token}`)
+    authAPI
+      .get(`/api/user_profile?token=${token}`)
       .then((res) => {
-        const data = res.data
+        const data = res.data;
 
         // Save in AuthContext
-        setUser(data)
+        setUser(data);
 
-        // Set form values
+        // Load data into form
         setFormData({
           name: data.name,
-          email: data.Email,                   // backend uses "Email"
-          mobile: data.Moblile_Number          // backend uses "Moblile_Number"
-        })
+          email: data.Email,            // backend uses "Email"
+          mobile: data.Moblile_Number   // backend uses "Moblile_Number"
+        });
       })
-      .finally(() => setLoading(false))
-  }, [setUser])
+      .catch((err) => console.log("Profile fetch error:", err))
+      .finally(() => setLoading(false));
+  }, [setUser]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSave = (e) => {
-    e.preventDefault()
-    setEditMode(false)
+    e.preventDefault();
 
-    console.log("Updated profile:", formData)
-    // You can send update API later
-  }
+    setEditMode(false);
 
-  if (loading) return <h2>Loading profile...</h2>
+    console.log("Updated profile:", formData);
+
+    // TODO: Add update API here
+  };
+
+  if (loading) return <h2>Loading profile...</h2>;
 
   return (
     <div className="profile-page">
@@ -104,20 +109,12 @@ export default function Profile() {
               {editMode ? (
                 <>
                   <button type="submit" className="btn-save">Save</button>
-                  <button
-                    type="button"
-                    className="btn-cancel"
-                    onClick={() => setEditMode(false)}
-                  >
+                  <button type="button" className="btn-cancel" onClick={() => setEditMode(false)}>
                     Cancel
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  className="btn-edit"
-                  onClick={() => setEditMode(true)}
-                >
+                <button type="button" className="btn-edit" onClick={() => setEditMode(true)}>
                   ✏️ Edit Profile
                 </button>
               )}
@@ -127,5 +124,5 @@ export default function Profile() {
         </div>
       </div>
     </div>
-  )
+  );
 }

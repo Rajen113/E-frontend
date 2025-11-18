@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./CreateProduct.css";
-import axiosInstance from "../../../../api/axiosConfig";
 
 function CreateProduct() {
   const [images, setImages] = useState([]);

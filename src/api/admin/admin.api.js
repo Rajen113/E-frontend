@@ -1,5 +1,5 @@
-import axiosInstance from "../axiosConfig";
+import {authAPI} from "../instances";
 
 export const adminRegisterAPI = (data) => {
-  return axiosInstance.post("/admin/register", data);
+  return authAPI.post("/admin/register", data);
 };
