@@ -1,33 +1,90 @@
-import React, { useState } from "react";
-import "./EditProduct.css"; // Reuse same CSS
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import "./EditProduct.css";
 
 function EditProduct() {
-  const [imagePreview, setImagePreview] = useState("/defaultProduct.png"); // existing image
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // Pre-filled product data
+  const [categories, setCategories] = useState([]);
+  const [imagePreview, setImagePreview] = useState("");
+  const [newImage, setNewImage] = useState(null);
+
   const [formData, setFormData] = useState({
-    productId: "PRO001",
-    productName: "Premium Dog Food",
-    category: "Dried Food",
-    quantity: 50,
-    price: 299,
+    name: "",
+    category_id: "",
+    quantity: "",
+    price: "",
+    description: "",
+    is_active: true,
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  // Load categories
+  useEffect(() => {
+    axios
+      .get("http://192.168.29.249:8001/categories/api/get_categories")
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) setImagePreview(URL.createObjectURL(file));
-  };
+  // Load existing product data
+  useEffect(() => {
+    axios
+      .get(`http://192.168.29.249:8001/api/product/get/${id}`)
+      .then((res) => {
+        const p = res.data;
 
-  const handleSubmit = (e) => {
+        setFormData({
+          name: p.name,
+          category_id: p.category_id,
+          quantity: p.quantity,
+          price: p.price,
+          description: p.description,
+          is_active: p.is_active,
+        });
+
+        if (p.image_path && p.image_path.length > 0) {
+          setImagePreview(`http://192.168.29.249:8001/${p.image_path[0]}`);
+        }
+      })
+      .catch((err) => console.log("Fetch error:", err));
+  }, [id]);
+
+  // Submit update
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Updated Product:", formData);
+
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("price", formData.price);
+    form.append("quantity", formData.quantity);
+    form.append("description", formData.description);
+    form.append("category_id", formData.category_id);
+    form.append("is_active", formData.is_active);
+
+    if (newImage) {
+      form.append("images", newImage);
+    }
+
+    try {
+      await axios.put(
+        `http://192.168.29.249:8001/api/update_product/${id}`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      alert("Product updated!");
+      navigate("/admin/productList");
+
+    } catch (err) {
+      console.error("Update error:", err);
+      alert("Failed to update product!");
+    }
   };
 
   return (
@@ -35,80 +92,92 @@ function EditProduct() {
       <h2>Edit Product</h2>
 
       <form className="product-form" onSubmit={handleSubmit}>
-
-        <div className="form-group">
-          <label>Product ID</label>
-          <input
-            type="text"
-            name="productId"
-            value={formData.productId}
-            onChange={handleChange}
-            disabled
-          />
-        </div>
-
+        
+        {/* Name */}
         <div className="form-group">
           <label>Product Name</label>
           <input
-            type="text"
-            name="productName"
-            value={formData.productName}
-            onChange={handleChange}
+            value={formData.name}
+            onChange={(e) =>
+              setFormData({ ...formData, name: e.target.value })
+            }
             required
           />
         </div>
 
+        {/* Category */}
         <div className="form-group">
           <label>Category</label>
           <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
+            value={formData.category_id}
+            onChange={(e) =>
+              setFormData({ ...formData, category_id: e.target.value })
+            }
             required
           >
             <option value="">Select Category</option>
-            <option value="Dried Food">Dried Food</option>
-            <option value="Wet Food">Wet Food</option>
-            <option value="Supplemental Food">Supplemental Food</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.category}
+              </option>
+            ))}
           </select>
         </div>
 
+        {/* Quantity */}
         <div className="form-group">
           <label>Quantity</label>
           <input
             type="number"
-            name="quantity"
             value={formData.quantity}
-            onChange={handleChange}
+            onChange={(e) =>
+              setFormData({ ...formData, quantity: e.target.value })
+            }
             required
           />
         </div>
 
+        {/* Price */}
         <div className="form-group">
           <label>Price</label>
           <input
             type="number"
-            name="price"
             value={formData.price}
-            onChange={handleChange}
+            onChange={(e) =>
+              setFormData({ ...formData, price: e.target.value })
+            }
             required
           />
         </div>
 
+        {/* Description */}
+        <div className="form-group description-box">
+          <label>Description</label>
+          <textarea
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            required
+          ></textarea>
+        </div>
+
+        {/* Image */}
         <div className="form-group">
           <label>Product Image</label>
 
-          <div className="upload-box">
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
-            <p>Click to upload new image</p>
-          </div>
-
           {imagePreview && (
-            <img src={imagePreview} alt="preview" className="product-preview" />
+            <img src={imagePreview} alt="Product" className="product-preview" />
           )}
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setNewImage(e.target.files[0])}
+          />
         </div>
 
-        <button type="submit" className="btn-submit">Save Changes</button>
+        <button className="btn-submit">Save Changes</button>
       </form>
     </div>
   );

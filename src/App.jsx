@@ -52,9 +52,13 @@ function App() {
            <Route path="/admin/categoryList" element={<CategoryList />} />
            <Route path="/admin/createcategory" element={<CreateCategory />} />
             <Route path="/admin/orderList" element={<OrderList />} />
-            <Route path="/admin/editCategory" element={<EditCategory />} />
-            <Route path="/admin/editProduct" element={<EditProduct />} />
+           
              <Route path="/admin/profile" element={<AdminProfile />} />
+
+        <Route path="/admin/editProduct/:id" element={<EditProduct />} />
+
+<Route path="/admin/editCategory/:id" element={<EditCategory />} />
+
             
 
            </Route>
