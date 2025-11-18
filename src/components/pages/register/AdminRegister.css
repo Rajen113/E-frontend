@@ -1,4 +1,4 @@
-
+/* SUCCESS MESSAGE */
 .success-text {
   color: #2e7d32;
   background: rgba(46, 125, 50, 0.05);
@@ -11,6 +11,7 @@
   font-weight: 500;
 }
 
+/* ERROR MESSAGE */
 .error-text {
   color: #db4c28;
   background: rgba(219, 76, 40, 0.05);
@@ -22,6 +23,7 @@
   text-align: center;
 }
 
+/* MAIN WRAPPER */
 .register-wrapper {
   display: flex;
   min-height: 100vh;
@@ -35,7 +37,7 @@
   padding: 20px 0;
 }
 
-
+/* LEFT SIDE IMAGE */
 .register-left {
   position: relative;
   width: 40%;
@@ -48,13 +50,12 @@
   object-fit: contain;
 }
 
-
+/* RIGHT SIDE FORM */
 .register-right {
   flex: 1;
   display: flex;
   justify-content: center;
 }
-
 
 .register-form {
   width: 100%;
@@ -67,7 +68,7 @@
 
 .register-form h2 {
   font-size: 26px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   color: #333;
   text-align: center;
  
@@ -81,15 +82,18 @@
   border-radius: 8px;
   font-size: 14px;
   transition: 0.2s ease;
+  background-color: #fff;
 }
 
-.register-form input:focus {
+/* INPUT FOCUS EFFECT */
+.register-form input:focus,
+.register-form select:focus {
   border-color: #db4c28;
   outline: none;
   box-shadow: 0 0 5px rgba(219, 76, 40, 0.3);
 }
 
-
+/* REGISTER BUTTON */
 .register-btn {
   width: 100%;
   padding: 12px;
@@ -109,7 +113,7 @@
   transform: scale(1.02);
 }
 
-
+/* DIVIDER */
 .divider {
   text-align: center;
   margin: 20px 0;
@@ -136,7 +140,7 @@
   right: 0;
 }
 
-
+/* LOGIN TEXT */
 .login-text {
   text-align: center;
   color: #555;

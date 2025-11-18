@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import './Navbar.css'
+import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
+import { FiLogOut } from "react-icons/fi"
 
 function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext)
@@ -14,12 +16,11 @@ function Navbar() {
     logout()
     navigate('/login')
   }
-  //  Toggle dropdown on button click
+
   const handleDropdownToggle = () => {
     setShowRegisterDropdown(!showRegisterDropdown)
   }
 
-  //  Close dropdown when clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -34,6 +35,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
+
       {/* Left: Logo */}
       <div className="navbar-logo">
         <Link to="/" className="logo-text">
@@ -49,25 +51,31 @@ function Navbar() {
           placeholder="Search for products, brands, and more..."
           className="search-input"
         />
-        <button className="search-btn">🔍</button>
+        <button className="search-btn">
+          <FaSearch />
+        </button>
       </div>
 
       {/* Right: Actions */}
       <div className="navbar-actions">
         {isLoggedIn ? (
           <>
-            <Link to="/profile" className="nav-btn">👤 Profile</Link>
-            <button onClick={handleLogout} className="nav-btn logout">Logout</button>
+            <Link to="/profile" className="nav-btn">
+              <FaUser /> Profile
+            </Link>
 
-            {/*  Cart button only when logged in */}
-            <Link to="/cart" className="nav-btn cart">🛒 Cart</Link>
+            <button onClick={handleLogout} className="nav-btn logout">
+              <FiLogOut /> Logout
+            </button>
+
+            <Link to="/cart" className="nav-btn cart">
+              <FaShoppingCart /> Cart
+            </Link>
           </>
         ) : (
           <>
-            {/* Normal Login */}
             <Link to="/login" className="nav-btn">Login</Link>
 
-            {/* Register Dropdown */}
             <div className="dropdown" ref={dropdownRef}>
               <button
                 onClick={handleDropdownToggle}
@@ -85,6 +93,7 @@ function Navbar() {
                   >
                     👤 User Register
                   </Link>
+
                   <Link
                     to="/admin/register"
                     className="dropdown-item"
