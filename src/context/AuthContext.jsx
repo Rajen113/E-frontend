@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
     loadUserProfile();
   }, []);
 
+  console.log(user)
   
   const login = (token) => {
     localStorage.setItem("authToken", token);

@@ -11,7 +11,6 @@ export function ProductProvider({ children }) {
     async function load() {
       try {
         const res = await productAPI.get("/api/get_products/");
-        console.log(res.data)
         setProducts(res.data);
       } catch (error) {
         console.log("Product Load Error:", error);

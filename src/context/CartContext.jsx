@@ -14,12 +14,8 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  //  CACHE to prevent repeated product fetches
   const productCache = {};
-
-  // ----------------------------------------------------
-  // IMAGE PATH PARSER — FIXES: """[\""static/img.png\""]"""
-  // ----------------------------------------------------
+ 
   const parseImagePath = (imagePath) => {
     if (!imagePath) return [];
 
@@ -38,9 +34,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ----------------------------------------------------
-  // FETCH PRODUCT DETAILS WITH CACHE
-  // ----------------------------------------------------
   const fetchProductDetails = async (product_id) => {
     if (productCache[product_id]) {
       return productCache[product_id];
@@ -59,9 +52,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ----------------------------------------------------
-  // FETCH CART
-  // ----------------------------------------------------
   const fetchCart = async () => {
     try {
       const res = await getCartAPI();
@@ -98,9 +88,6 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, []);
 
-  // ----------------------------------------------------
-  // ADD TO CART
-  // ----------------------------------------------------
   const addToCart = async (product_id) => {
     try {
       await addToCartAPI(product_id, 1);
@@ -110,9 +97,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ----------------------------------------------------
-  // UPDATE QTY
-  // ----------------------------------------------------
   const updateQty = async (product_id, qty) => {
     try {
       await updateCartItemAPI(product_id, qty);
@@ -122,9 +106,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ----------------------------------------------------
-  // REMOVE ITEM
-  // ----------------------------------------------------
   const removeFromCart = async (product_id) => {
     try {
       const res = await removeCartItemAPI(product_id);
@@ -137,9 +118,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ----------------------------------------------------
-  // CLEAR CART
-  // ----------------------------------------------------
   const clearCart = async () => {
     try {
       await deleteCartAPI();

@@ -17,7 +17,7 @@ function Shop() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [priceRange, setPriceRange] = useState(10000);
+  const [priceRange, setPriceRange] = useState(100000);
 
   if (loading) return <h2 className="loading">Loading products...</h2>;
 

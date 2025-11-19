@@ -16,9 +16,6 @@ export default function Profile() {
 
   const token = localStorage.getItem("token");
 
-  // ----------------------------------------------------------
-  // FETCH PROFILE DATA
-  // ----------------------------------------------------------
   useEffect(() => {
     authAPI
       .get(`/api/user_profile?token=${token}`)
@@ -40,16 +37,10 @@ export default function Profile() {
       .finally(() => setLoading(false));
   }, []);
 
-  // ----------------------------------------------------------
-  // INPUT CHANGE HANDLER
-  // ----------------------------------------------------------
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ----------------------------------------------------------
-  // SAVE PROFILE
-  // ----------------------------------------------------------
   const handleSave = (e) => {
     e.preventDefault();
 
@@ -68,14 +59,8 @@ export default function Profile() {
       });
   };
 
-  // ----------------------------------------------------------
-  // LOADING
-  // ----------------------------------------------------------
   if (loading) return <h2 className="loading">Loading profile...</h2>;
 
-  // ----------------------------------------------------------
-  // UI
-  // ----------------------------------------------------------
   return (
     <div className="profile-page">
       <div className="profile-container">

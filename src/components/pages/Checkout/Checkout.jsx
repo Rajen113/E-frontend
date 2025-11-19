@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../../context/CartContext";
 import { AuthContext } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { placeOrderAPI } from "../../../services/orderService";
 import "./Checkout.css";
 
 export default function Checkout() {
@@ -20,18 +21,18 @@ export default function Checkout() {
     state: "",
   });
 
-  // 🟢 Auto-fill from logged-in user
+  //Auto-fill user data from AuthContext
   useEffect(() => {
     if (user) {
       setAddress((prev) => ({
         ...prev,
         name: user.name || "",
-        mobile: user.Mobile_Number || user.mobile || "",
+        mobile: user.Mobile_Number,
       }));
     }
   }, [user]);
 
-  // Protect checkout if user not logged in
+  //Protect Route: Redirect if not logged in
   useEffect(() => {
     if (!isLoggedIn) navigate("/login");
   }, [isLoggedIn]);
@@ -46,30 +47,59 @@ export default function Checkout() {
   const shipping = subtotal > 1000 ? 0 : 50;
   const total = subtotal + shipping;
 
-  // SUBMIT ORDER
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     const { name, mobile, pincode, addressLine, city, state } = address;
 
+    // Validation
     if (!name || !mobile || !pincode || !addressLine || !city || !state) {
       setMessage("⚠️ Please fill all address fields!");
       return;
     }
 
-    setMessage("🎉 Order placed successfully!");
+    // Convert cart → backend format
+    const cart_items = cart.map((item) => ({
+      product_id: item.id,
+      quantity: item.qty,
+    }));
 
-    setTimeout(() => navigate("/order-success"), 1000);
+    // Backend address format
+    const shipping_address = {
+      recipient_name: name,
+      street: addressLine,
+      city: city,
+      postal_code: pincode,
+      country: state || "India",
+    };
+
+    const orderData = {
+      cart_items,
+      shipping_address,
+    };
+
+    try {
+      console.log("ORDER JSON SENT:", orderData);
+
+      await placeOrderAPI(orderData);
+
+      setMessage("🎉 Order placed successfully!");
+
+      setTimeout(() => navigate("/order-success"), 1000);
+    } catch (err) {
+      console.error("Order error:", err);
+      setMessage("❌ Failed to place order");
+    }
   };
 
   return (
     <div className="checkout-container">
       <h2>Checkout</h2>
 
-      {/* MESSAGE BOX */}
+      {/* MESSAGE DISPLAY */}
       {message && <p className="checkout-msg">{message}</p>}
 
       <div className="checkout-grid">
-
-        {/* LEFT: ADDRESS */}
+        
+        {/* LEFT: ADDRESS FORM */}
         <div className="checkout-section">
           <h3>Shipping Address</h3>
 
@@ -142,6 +172,7 @@ export default function Checkout() {
             Place Order
           </button>
         </div>
+
       </div>
     </div>
   );
