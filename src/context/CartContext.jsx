@@ -1,39 +1,80 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import {
+  getCartAPI,
+  addToCartAPI,
+  deleteCartAPI,
+  updateCartItemAPI,
+} from "../services/cartService";
 
 export const CartContext = createContext();
 
-export function CartProvider({ children }) {
+export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const addToCart = (product) => {
-    const exist = cart.find((item) => item.id === product.id);
-
-    if (exist) {
-      setCart(
-        cart.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
-        )
-      );
-    } else {
-      setCart([...cart, { ...product, qty: 1 }]);
+  const fetchCart = async () => {
+    try {
+      const res = await getCartAPI();
+      setCart(res.data.items || []);
+    } catch (error) {
+      console.error("Error loading cart:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const removeFromCart = (id) => {
-    setCart(cart.filter((item) => item.id !== id));
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const addToCart = async (product_id) => {
+    try {
+      await addToCartAPI(product_id, 1);
+      fetchCart();
+    } catch (error) {
+      console.error("Add to cart failed:", error);
+    }
   };
 
-  const updateQty = (id, qty) => {
-    setCart(
-      cart.map((item) =>
-        item.id === id ? { ...item, qty: qty } : item
-      )
-    );
+  const updateQty = async (product_id, qty) => {
+    try {
+      await updateCartItemAPI(product_id, qty);
+      fetchCart();
+    } catch (error) {
+      console.error("Update qty error:", error);
+    }
+  };
+
+  const removeFromCart = async (product_id) => {
+    try {
+      await updateCartItemAPI(product_id, 0);
+      fetchCart();
+    } catch (error) {
+      console.error("Remove item error:", error);
+    }
+  };
+
+  const clearCart = async () => {
+    try {
+      await deleteCartAPI();
+      setCart([]);
+    } catch (error) {
+      console.error("Clear cart error:", error);
+    }
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQty }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        loading,
+        addToCart,
+        updateQty,
+        removeFromCart,
+        clearCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
-}
+};

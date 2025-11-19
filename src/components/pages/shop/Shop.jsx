@@ -21,18 +21,20 @@ function Shop() {
 
   if (loading) return <h2 className="loading">Loading products...</h2>;
 
-  /* ---------------- Transform Backend API Data ---------------- */
+  const API_BASE_URL = "http://192.168.29.249:8001";
+
+  /* Transform backend product */
   const transformedProducts = products.map((p) => ({
     id: p.id,
     title: p.name,
     price: p.price,
     category: p.category?.category,
-    img: `${import.meta.env.VITE_PRODUCT_URL}/${p.image_path[0]}`,
+    img: `${API_BASE_URL}/${p.image_path[0].replace(/^\/+/, "")}`,
     description: p.description,
     stock: p.quantity,
   }));
 
-  /* ---------------- Filtering Logic ---------------- */
+  /* Filter */
   const filteredProducts = transformedProducts.filter((p) => {
     const matchCategory =
       selectedCategory === "All" || p.category === selectedCategory;
@@ -42,7 +44,7 @@ function Shop() {
     return matchCategory && matchPrice;
   });
 
-  /* ---------------- Add to Cart ---------------- */
+  /* Add to cart */
   const handleAdd = (product) => {
     if (!isLoggedIn) {
       navigate("/login");
@@ -53,15 +55,14 @@ function Shop() {
       id: product.id,
       name: product.title,
       price: product.price,
-      img: `${import.meta.env.VITE_PRODUCT_URL}/${p.image_path[0]}`,
-
+      img: product.img,
       qty: 1,
     });
 
-    showToast("Product added to cart!");
+    showToast("🛒 Added to cart!");
   };
 
-  /* ---------------- Collect Unique Categories ---------------- */
+  /* Categories */
   const categories = [
     "All",
     ...new Set(transformedProducts.map((p) => p.category)),
@@ -70,10 +71,8 @@ function Shop() {
   return (
     <div className="shop-container">
 
-      {/* ---------------- FILTER SECTION ---------------- */}
+      {/* FILTERS */}
       <div className="shop-filters">
-
-        {/* Category filter */}
         <div className="filter-scroll">
           {categories.map((cat) => (
             <button
@@ -86,13 +85,12 @@ function Shop() {
           ))}
         </div>
 
-        {/* Price filter */}
         <div className="price-filter">
           <label>Up to ₹{priceRange}</label>
           <input
             type="range"
             min="500"
-            max="10000"
+            max="100000"
             step="500"
             value={priceRange}
             onChange={(e) => setPriceRange(Number(e.target.value))}
@@ -100,32 +98,30 @@ function Shop() {
         </div>
       </div>
 
-      {/* ---------------- PRODUCT GRID ---------------- */}
+      {/* PRODUCT GRID */}
       <div className="shop-products">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <div className="shop-card" key={product.id}>
               <Link to={`/product/${product.id}`}>
-                <img
-                  src={product.img}
-                  alt={product.title}
-                  loading="lazy"
-                />
+                <img src={product.img} alt={product.title} />
               </Link>
 
               <h4>{product.title}</h4>
 
-              {/* Truncated Description */}
               <p className="shop-desc">
                 {product.description.length > 30
                   ? product.description.substring(0, 30) + "..."
                   : product.description}
               </p>
 
-              <p>₹{product.price}</p>
+              <p className="price">₹{product.price}</p>
 
-              <button onClick={() => handleAdd(product)}>
-                Add to Cart
+              <button 
+                className="add-btn"
+                onClick={() => handleAdd(product)}
+              >
+                🛒 Add to Cart
               </button>
             </div>
           ))

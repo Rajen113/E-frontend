@@ -1,33 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./ProductList.css";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
 function ProductList() {
-  const products = [
-    {
-      id: 1,
-      name: "Dry Cat Food",
-      category: "Dried Food",
-      quantity: 20,
-      price: 499,
-      image: "/cat-food.png",
-    },
-    {
-      id: 2,
-      name: "Wet Dog Food",
-      category: "Wet Food",
-      quantity: 10,
-      price: 899,
-      image: "/dog-food.png",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+
+  const loadProducts = async () => {
+    const res = await axios.get("http://192.168.29.249:8001/api/get_products");
+    console.log(res.data)
+    setProducts(res.data);
+
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const deleteProduct = async (id) => {
+    if (!window.confirm("Delete this product?")) return;
+
+    await axios.delete(`http://192.168.29.249:8001/api/delete_product/${id}`);
+    loadProducts();
+  };
+
+  const API_BASE_URL = "http://192.168.29.249:8001"; // Your FastAPI server address
 
   return (
     <div className="product-list-container">
       <div className="header">
         <h2>All Products</h2>
-         {/* <h1 className="add-btn"><Link to="/admin/addProduct">Create Product</Link></h1> */}
-        <button className="add-btn"><Link to="/admin/addProduct">Add New</Link></button>
+        <button className="add-btn">
+          <Link to="/admin/addProduct">Add New</Link>
+        </button>
       </div>
 
       <table className="product-table">
@@ -47,17 +52,38 @@ function ProductList() {
           {products.map((p) => (
             <tr key={p.id}>
               <td>{p.id}</td>
+
               <td>
-                <img src={p.image} alt="" className="product-img" />
+                {/* {console.log(p.image_path)} */}
+                <img
+                  src={`http://192.168.29.249:8001/${p.image_path[0]}`}
+                  className="product-img"
+                  alt="product"
+                />
+
+
               </td>
+             
+
+
               <td>{p.name}</td>
-              <td>{p.category}</td>
+              <td>{p.category.category}</td>
               <td>{p.quantity}</td>
               <td>₹{p.price}</td>
+
               <td>
-                <button className="edit-btn"><Link to="/admin/editProduct">Edit</Link></button>
-                <button className="delete-btn">Delete</button>
+                <Link to={`/admin/editProduct/${p.id}`}>
+                  <button className="edit-btn">Edit</button>
+                </Link>
+
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteProduct(p.id)}
+                >
+                  Delete
+                </button>
               </td>
+
             </tr>
           ))}
         </tbody>

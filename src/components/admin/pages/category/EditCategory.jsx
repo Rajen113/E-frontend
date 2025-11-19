@@ -1,25 +1,41 @@
-import React, { useState, useEffect } from "react";
-import "./EditCategory.css"; // Reuse same CSS
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import "./EditCategory.css";
 
 function EditCategory() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // Pre-filled values (fetch from API later)
   const [formData, setFormData] = useState({
-    categoryId: "CAT001",
-    categoryName: "Electronics",
-    description: "All electronic products"
+    category: "",
+    description: "",
   });
 
+  useEffect(() => {
+    axios
+      .get(`http://192.168.29.249:8001/categories/api/get_category/${id}`)
+      .then((res) => {
+        setFormData({
+          category: res.data.category,
+          description: res.data.description,
+        });
+      });
+  }, [id]);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Updated Category:", formData);
+
+    await axios.put(
+      `http://192.168.29.249:8001/categories/api/update_category/${id}`,
+      formData
+    );
+
+    navigate("/admin/categoryList");
   };
 
   return (
@@ -27,24 +43,12 @@ function EditCategory() {
       <h2>Edit Category</h2>
 
       <form className="category-form" onSubmit={handleSubmit}>
-        
-        <div className="form-group">
-          <label>Category ID</label>
-          <input
-            type="text"
-            name="categoryId"
-            value={formData.categoryId}
-            onChange={handleChange}
-            disabled
-          />
-        </div>
-
         <div className="form-group">
           <label>Category Name</label>
           <input
             type="text"
-            name="categoryName"
-            value={formData.categoryName}
+            name="category"
+            value={formData.category}
             onChange={handleChange}
             required
           />
@@ -61,7 +65,7 @@ function EditCategory() {
           />
         </div>
 
-        <button type="submit" className="btn-submit">Save Changes</button>
+        <button className="btn-submit">Save Changes</button>
       </form>
     </div>
   );
