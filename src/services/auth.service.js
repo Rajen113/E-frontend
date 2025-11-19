@@ -8,12 +8,12 @@ export const loginService = async ({ username, password }) => {
     data.append("password", password);
 
     const res = await loginAPI(data);
-    console.log(res.data)
+    console.log(res);
 
     const token = res.data?.access_token;
 
     if (token) {
-      localStorage.setItem("authToken", token);
+      localStorage.setItem("token", token);
     }
 
     return { success: true, token, data: res.data };
@@ -25,6 +25,7 @@ export const loginService = async ({ username, password }) => {
     };
   }
 };
+
 
 export const registerService = async (userData) => {
   try {

@@ -1,30 +1,51 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect } from "react";
+import { authAPI } from "../api/instances";
 
-export const AuthContext = createContext()
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [user, setUser] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const loadUserProfile = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return;
+
+    try {
+      const res = await authAPI.get(`/api/user_profile?token=${token}`);
+      setUser(res.data);
+      setIsLoggedIn(true);
+    } catch (err) {
+      console.log("Failed to load user profile:", err);
+      setIsLoggedIn(false);
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken') 
-    setIsLoggedIn(!!token)
-  }, [])
+    loadUserProfile();
+  }, []);
 
+  console.log(user)
+  
   const login = (token) => {
-    localStorage.setItem('authToken', token)
-    setIsLoggedIn(true)
-  }
+    localStorage.setItem("authToken", token);
+    setIsLoggedIn(true);
+    loadUserProfile();
+  };
 
+  
   const logout = () => {
-    localStorage.removeItem('authToken')
-    setIsLoggedIn(false)
-    setUser(null)
-  }
+    localStorage.removeItem("authToken");
+    setIsLoggedIn(false);
+    setUser(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, user, setUser }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, login, logout, user, setUser }}
+    >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};

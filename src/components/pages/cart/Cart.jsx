@@ -20,16 +20,16 @@ export default function Cart() {
         {cart.map((item) => (
           <div className="cart-card" key={item.id}>
             
-            {/* IMAGE FIXED */}
+            {/* IMAGE (Corrected) */}
             <img 
-              src={item.thumbnail} 
-              alt={item.title} 
+              src={item.img} 
+              alt={item.name}
             />
 
             <div className="cart-info">
 
-              {/* NAME FIXED */}
-              <h3>{item.title}</h3>
+              {/* NAME (Corrected) */}
+              <h3>{item.name}</h3>
 
               {/* PRICE */}
               <p>₹{item.price}</p>
@@ -58,6 +58,7 @@ export default function Cart() {
               </button>
             </div>
 
+            {/* SUBTOTAL */}
             <div className="cart-total">
               <p>₹{item.price * item.qty}</p>
             </div>
@@ -66,10 +67,10 @@ export default function Cart() {
         ))}
       </div>
 
+      {/* TOTAL SUMMARY */}
       <div className="cart-summary">
         <h3>Total Amount: ₹{total}</h3>
 
-        {/* CHECKOUT BUTTON FIXED */}
         <button 
           className="checkout-btn"
           onClick={() => navigate("/checkout")}
@@ -80,3 +81,4 @@ export default function Cart() {
     </div>
   );
 }
+  

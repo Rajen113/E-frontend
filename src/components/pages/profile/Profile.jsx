@@ -9,37 +9,33 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobile: ''
+    name: "",
+    email: "",
+    mobile: "",
   });
 
-  // 🔥 Fetch user profile from backend
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+  const token = localStorage.getItem("token");
 
+  useEffect(() => {
     authAPI
       .get(`/api/user_profile?token=${token}`)
       .then((res) => {
-        const data = res.data;
+        const d = res.data;
+        console.log("Profile:", d);
 
-        // Save in AuthContext
-        setUser(data);
+        setUser(d);
 
-        // Load data into form
         setFormData({
-          name: data.name,
-          email: data.Email,            // backend uses "Email"
-          mobile: data.Moblile_Number   // backend uses "Moblile_Number"
+          name: d?.name || "",
+          email: d?.email || d?.Email || "",
+          mobile: d?.Mobile_Number || d?.Moblile_Number || "",
         });
       })
-      .catch((err) => console.log("Profile fetch error:", err))
+      .catch((err) => {
+        console.log("Profile fetch error:", err);
+      })
       .finally(() => setLoading(false));
-  }, [setUser]);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,14 +44,22 @@ export default function Profile() {
   const handleSave = (e) => {
     e.preventDefault();
 
-    setEditMode(false);
-
-    console.log("Updated profile:", formData);
-
-    // TODO: Add update API here
+    authAPI
+      .put(`/api/update_profile?token=${token}`, {
+        name: formData.name,
+        Mobile_Number: formData.mobile,
+      })
+      .then((res) => {
+        alert("Profile updated successfully!");
+        setUser(res.data);
+        setEditMode(false);
+      })
+      .catch((err) => {
+        console.log("Update error:", err);
+      });
   };
 
-  if (loading) return <h2>Loading profile...</h2>;
+  if (loading) return <h2 className="loading">Loading profile...</h2>;
 
   return (
     <div className="profile-page">
@@ -65,7 +69,7 @@ export default function Profile() {
         <div className="profile-card">
 
           <div className="profile-avatar">
-            <img
+            <img 
               src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
               alt="User Avatar"
             />
@@ -108,13 +112,21 @@ export default function Profile() {
             <div className="form-buttons">
               {editMode ? (
                 <>
-                  <button type="submit" className="btn-save">Save</button>
-                  <button type="button" className="btn-cancel" onClick={() => setEditMode(false)}>
+                  <button className="btn-save">Save</button>
+                  <button 
+                    type="button"
+                    className="btn-cancel"
+                    onClick={() => setEditMode(false)}
+                  >
                     Cancel
                   </button>
                 </>
               ) : (
-                <button type="button" className="btn-edit" onClick={() => setEditMode(true)}>
+                <button
+                  type="button"
+                  className="btn-edit"
+                  onClick={() => setEditMode(true)}
+                >
                   ✏️ Edit Profile
                 </button>
               )}
