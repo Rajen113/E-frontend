@@ -78,7 +78,7 @@ function AdminRegister() {
     }
 
     alert(response.message)
-    navigate('/login')
+    navigate('/admin/login')
   }
 
   return (

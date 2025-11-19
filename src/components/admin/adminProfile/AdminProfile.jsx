@@ -1,80 +1,145 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from 'react';
+import { authAPI } from '../../../api/instances';
+import { AdminContext } from '../../../context/AdminContext';
 import "./AdminProfile.css";
 
-function AdminProfile() {
+export default function AdminProfile() {
+  const { admin, setAdmin } = useContext(AdminContext);
+
+  const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const [formData, setFormData] = useState({
-    name: "John Doe",
-    email: "admin@example.com",
-    mobile_number: "9876543210",
-    goverment_id: "123456789",
-    id_proof_path: "uploads/id-proof.png",
-    gst_number: "22AAAAA0000A1Z5",
-    address: "Street 45, Mumbai, India",
-    profile_image: "/profile.png",
+    name: "",
+    Email: "",
+    Mobile_Number: "",
+    Goverment_ID: "",
+    GST_Number: "",
+    
   });
 
-  const [imagePreview, setImagePreview] = useState(formData.profile_image);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    authAPI
+      .get(`/api/admin_profile?token=${token}`)
+      .then((res) => {
+        const data = res.data; 
+
+     
+        setAdmin(data);
+
+        setFormData({
+          name: data.name || "",
+          Email: data.Email || "",
+           Mobile_Number: data. Mobile_Number || "",
+          Goverment_ID: data.Goverment_ID|| "",
+          GST_Number: data.GST_Number || "",
+         
+        });
+      })
+      .catch((err) => console.log("Profile fetch error:", err))
+      .finally(() => setLoading(false));
+  }, [setAdmin]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) setImagePreview(URL.createObjectURL(file));
+  const handleSave = (e) => {
+    e.preventDefault();
+
+    console.log("Updated profile:", formData);
+
+    setEditMode(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Profile Updated Successfully!");
-  };
+  if (loading) return <h2>Loading profile...</h2>;
 
   return (
     <div className="profile-wrapper">
-
       <div className="profile-right">
         <div className="profile-form">
-          <h2>Admin Profile</h2>
+          <h2>👤 {formData.name} Profile</h2>
 
-          <form onSubmit={handleSubmit}>
-            <div className="profile-photo">
-
-              <img src={imagePreview} alt="Profile" className="profile-img" />
-
-              <label className="upload-label">
-                Upload Photo
-                <input type="file" accept="image/*" onChange={handleImageUpload} />
-              </label>
-
-            </div>
-
+          <form onSubmit={handleSave}>
             <div className="profile-fields">
-
               <div className="fields">
-                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required />
-                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" required />
-                <input type="text" name="mobile_number" value={formData.mobile_number} onChange={handleChange} placeholder="Mobile Number" required />
-                <input type="text" name="goverment_id" value={formData.goverment_id} onChange={handleChange} placeholder="Government ID" required />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  readOnly={!editMode}
+                />
+
+                <input
+                  type="email"
+                  name="Email"
+                  value={formData.Email}
+                  onChange={handleChange}
+                  readOnly={!editMode}
+                />
+
+                <input
+                  type="text"
+                  name=" Mobile_Number"
+                  value={formData. Mobile_Number}
+                  onChange={handleChange}
+                  readOnly={!editMode}
+                />
+
+                <input
+                  type="text"
+                  name="Goverment_ID"
+                  value={formData.Goverment_ID}
+                  onChange={handleChange}
+                  readOnly={!editMode}
+                />
               </div>
 
               <div className="fields">
-                <input type="text" name="id_proof_path" value={formData.id_proof_path} onChange={handleChange} placeholder="ID Proof Path" />
-                <input type="text" name="gst_number" value={formData.gst_number} onChange={handleChange} placeholder="GST Number" />
-                <textarea name="address" value={formData.address} onChange={handleChange} placeholder="Full Address"></textarea>
-              </div>
+                <input
+                  type="text"
+                  name="GST_Number"
+                  value={formData.GST_Number}
+                  onChange={handleChange}
+                  readOnly={!editMode}
+                />
 
+                {/* <textarea
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  readOnly={!editMode}
+                ></textarea> */}
+              </div>
             </div>
 
-            <button type="submit" className="profile-btn">
-              Save Changes
-            </button>
+            <div className="form-buttons">
+              {editMode ? (
+                <>
+                  <button type="submit" className="btn-save">Save</button>
+                  <button type="button" className="btn-cancel" onClick={() => setEditMode(false)}>
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button type="button" className="btn-edit" onClick={() => setEditMode(true)}>
+                  ✏️ Edit Profile
+                </button>
+              )}
+            </div>
           </form>
 
         </div>
       </div>
-
     </div>
   );
 }
-
-export default AdminProfile;

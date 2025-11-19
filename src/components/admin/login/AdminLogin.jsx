@@ -1,16 +1,16 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../context/AuthContext";
-import { loginService } from "../../../services/auth.service";
+import { AdminContext } from "../../../context/AdminContext";
+import { adminLoginService } from "../../../services/admin.service";
 import "./AdminLogin.css";
 import { FaUser } from "react-icons/fa";
 
 function AdminLogin() {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login } = useContext(AdminContext);
 
   const [formData, setFormData] = useState({
-    username: "",
+    Email: "",
     password: "",
   });
 
@@ -28,8 +28,7 @@ function AdminLogin() {
     e.preventDefault();
     setLoading(true);
 
-    const response = await loginService(formData);
-    console.log(response)
+    const response = await adminLoginService(formData);
 
     setLoading(false);
 
@@ -38,7 +37,9 @@ function AdminLogin() {
       return;
     }
 
+    // Save token to Context & localStorage
     login(response.token);
+
 
     setSuccess("Login successful! Redirecting...");
     setTimeout(() => navigate("/admin/dashboard"), 1500);
@@ -60,7 +61,7 @@ function AdminLogin() {
 
             <input
               type="email"
-              name="username"
+              name="Email"
               placeholder="Email"
               value={formData.username}
               onChange={handleChange}
