@@ -33,7 +33,7 @@ function Header() {
       {/* RIGHT SIDE SECTION */}
       <div className="header-right">
 
-        {isAdminLoggedIn ? (
+        {isLoggedIn ? (
           <>
             {/* Show when ADMIN is logged in */}
             <FaBell className="icon" />
