@@ -5,9 +5,11 @@ import { useNavigate } from "react-router-dom";
 import "./Checkout.css";
 
 export default function Checkout() {
-  const { cart, updateQty, removeFromCart, setCart } = useContext(CartContext);
-  const { isLoggedIn } = useContext(AuthContext);
+  const { cart } = useContext(CartContext);
+  const { isLoggedIn, user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [message, setMessage] = useState("");
 
   const [address, setAddress] = useState({
     name: "",
@@ -18,43 +20,56 @@ export default function Checkout() {
     state: "",
   });
 
-  // Protect Checkout
+  // 🟢 Auto-fill from logged-in user
+  useEffect(() => {
+    if (user) {
+      setAddress((prev) => ({
+        ...prev,
+        name: user.name || "",
+        mobile: user.Mobile_Number || user.mobile || "",
+      }));
+    }
+  }, [user]);
+
+  // Protect checkout if user not logged in
   useEffect(() => {
     if (!isLoggedIn) navigate("/login");
-    if (cart.length === 0) navigate("/cart");
-  }, [isLoggedIn, cart]);
+  }, [isLoggedIn]);
 
+  // Redirect if cart empty
+  useEffect(() => {
+    if (cart.length === 0) navigate("/cart");
+  }, [cart]);
+
+  // PRICE CALCULATION
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shipping = subtotal > 1000 ? 0 : 50;
   const total = subtotal + shipping;
 
+  // SUBMIT ORDER
   const handlePlaceOrder = () => {
-    if (
-      !address.name ||
-      !address.mobile ||
-      !address.addressLine ||
-      !address.city ||
-      !address.state ||
-      !address.pincode
-    ) {
-      alert("Please fill all address fields!");
+    const { name, mobile, pincode, addressLine, city, state } = address;
+
+    if (!name || !mobile || !pincode || !addressLine || !city || !state) {
+      setMessage("⚠️ Please fill all address fields!");
       return;
     }
 
-    // Send order to backend here (later)
-    console.log("Order placed!", { cart, address, total });
+    setMessage("🎉 Order placed successfully!");
 
-    // Go to success page
-    navigate("/order-success");
+    setTimeout(() => navigate("/order-success"), 1000);
   };
 
   return (
     <div className="checkout-container">
       <h2>Checkout</h2>
 
+      {/* MESSAGE BOX */}
+      {message && <p className="checkout-msg">{message}</p>}
+
       <div className="checkout-grid">
-        
-        {/* LEFT - Address Form */}
+
+        {/* LEFT: ADDRESS */}
         <div className="checkout-section">
           <h3>Shipping Address</h3>
 
@@ -76,7 +91,9 @@ export default function Checkout() {
             type="text"
             placeholder="Pincode"
             value={address.pincode}
-            onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
+            onChange={(e) =>
+              setAddress({ ...address, pincode: e.target.value })
+            }
           />
 
           <textarea
@@ -102,15 +119,13 @@ export default function Checkout() {
           />
         </div>
 
-        {/* RIGHT - Summary */}
+        {/* RIGHT: ORDER SUMMARY */}
         <div className="checkout-section">
           <h3>Order Summary</h3>
 
           {cart.map((item) => (
             <div className="summary-item" key={item.id}>
-              <span>
-                {item.name} (x{item.qty})
-              </span>
+              <span>{item.name} (x{item.qty})</span>
               <span>₹{item.price * item.qty}</span>
             </div>
           ))}

@@ -13,7 +13,7 @@ export const cartAPI = axios.create({
 });
 
 export const orderAPI = axios.create({
-  baseURL: import.meta.env.VITE_ORDER_URL || "http://192.168.29.249:800",
+  baseURL: import.meta.env.VITE_ORDER_URL || "http://192.168.29.249:8004",
 });
 
 export const paymentAPI = axios.create({
@@ -25,19 +25,13 @@ const services = [authAPI, productAPI, cartAPI, orderAPI, paymentAPI];
 services.forEach((api) => {
   api.interceptors.request.use(
     (config) => {
-      try {
-        const token = localStorage.getItem("authToken");
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      } catch (err) {
-        console.error("Request Interceptor Error:", err);
-        return Promise.reject(err);
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
       }
+      return config;
     },
-    (error) => {
-      return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
   );
 });

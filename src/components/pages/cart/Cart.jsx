@@ -1,96 +1,84 @@
-import { createContext, useEffect, useState } from "react";
-import {
-  getCartAPI,
-  addToCartAPI,
-  deleteCartAPI,
-  updateCartItemAPI,
-} from "../../../services/cartService"
+import React, { useContext } from "react";
+import { CartContext } from "../../../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import "./Cart.css";
 
-export const CartContext = createContext();
+export default function Cart() {
+  const { cart, removeFromCart, updateQty } = useContext(CartContext);
+  const navigate = useNavigate();
 
-export default function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);  
-  const [loading, setLoading] = useState(true);
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  // Load cart from backend
-  const fetchCart = async () => {
-    try {
-      const res = await getCartAPI();
-
-      // Convert backend response → frontend structure
-      const formatted = res.data.items.map((item) => ({
-        id: item.product_id,
-        name: item.product_name,
-        img: item.product_image,
-        price: item.price,
-        qty: item.quantity,
-      }));
-
-      setCart(formatted);
-
-    } catch (error) {
-      console.error("Cart load error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCart();
-  }, []);
-
-  // Add to cart
-  const addToCart = async (id) => {
-    try {
-      await addToCartAPI(id, 1);
-      fetchCart();
-    } catch (error) {
-      console.error("Add to cart error:", error);
-    }
-  };
-
-  // Update quantity
-  const updateQty = async (id, qty) => {
-    try {
-      await updateCartItemAPI(id, qty);
-      fetchCart();
-    } catch (error) {
-      console.error("Update qty error:", error);
-    }
-  };
-
-  // Remove item (qty = 0)
-  const removeFromCart = async (id) => {
-    try {
-      await updateCartItemAPI(id, 0);
-      fetchCart();
-    } catch (error) {
-      console.error("Remove item error:", error);
-    }
-  };
-
-  // Clear cart
-  const clearCart = async () => {
-    try {
-      await deleteCartAPI();
-      setCart([]);
-    } catch (error) {
-      console.error("Clear cart error:", error);
-    }
-  };
+  if (cart.length === 0)
+    return <h2 className="empty">Your cart is empty 🛒</h2>;
 
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        loading,
-        addToCart,
-        updateQty,
-        removeFromCart,
-        clearCart,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
+    <div className="cart-container">
+      <h2>Your Cart</h2>
+
+      <div className="cart-items">
+        {cart.map((item) => (
+          <div className="cart-card" key={item.id}>
+            
+            {/* IMAGE (Corrected) */}
+            <img 
+              src={item.img} 
+              alt={item.name}
+            />
+
+            <div className="cart-info">
+
+              {/* NAME (Corrected) */}
+              <h3>{item.name}</h3>
+
+              {/* PRICE */}
+              <p>₹{item.price}</p>
+
+              {/* QUANTITY */}
+              <div className="cart-qty">
+                <button
+                  onClick={() => updateQty(item.id, Math.max(1, item.qty - 1))}
+                >
+                  -
+                </button>
+
+                <span>{item.qty}</span>
+
+                <button onClick={() => updateQty(item.id, item.qty + 1)}>
+                  +
+                </button>
+              </div>
+
+              {/* REMOVE */}
+              <button
+                className="remove-btn"
+                onClick={() => removeFromCart(item.id)}
+              >
+                Remove
+              </button>
+            </div>
+
+            {/* SUBTOTAL */}
+            <div className="cart-total">
+              <p>₹{item.price * item.qty}</p>
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+      {/* TOTAL SUMMARY */}
+      <div className="cart-summary">
+        <h3>Total Amount: ₹{total}</h3>
+
+        <button 
+          className="checkout-btn"
+          onClick={() => navigate("/checkout")}
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
   );
 }
+  

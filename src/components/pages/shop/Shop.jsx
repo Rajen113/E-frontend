@@ -23,7 +23,7 @@ function Shop() {
 
   const API_BASE_URL = "http://192.168.29.249:8001";
 
-  /* Transform backend product */
+  // Transform product
   const transformedProducts = products.map((p) => ({
     id: p.id,
     title: p.name,
@@ -34,7 +34,6 @@ function Shop() {
     stock: p.quantity,
   }));
 
-  /* Filter */
   const filteredProducts = transformedProducts.filter((p) => {
     const matchCategory =
       selectedCategory === "All" || p.category === selectedCategory;
@@ -44,25 +43,18 @@ function Shop() {
     return matchCategory && matchPrice;
   });
 
-  /* Add to cart */
+  // ⭐ FIXED ADD TO CART
   const handleAdd = (product) => {
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
 
-    addToCart({
-      id: product.id,
-      name: product.title,
-      price: product.price,
-      img: product.img,
-      qty: 1,
-    });
+    addToCart(product.id);
 
     showToast("🛒 Added to cart!");
   };
 
-  /* Categories */
   const categories = [
     "All",
     ...new Set(transformedProducts.map((p) => p.category)),
@@ -70,7 +62,6 @@ function Shop() {
 
   return (
     <div className="shop-container">
-
       {/* FILTERS */}
       <div className="shop-filters">
         <div className="filter-scroll">
@@ -89,8 +80,8 @@ function Shop() {
           <label>Up to ₹{priceRange}</label>
           <input
             type="range"
-            min="500"
-            max="100000"
+            min="100"
+            max="1000000"
             step="500"
             value={priceRange}
             onChange={(e) => setPriceRange(Number(e.target.value))}
@@ -129,7 +120,6 @@ function Shop() {
           <p className="no-products">No products found.</p>
         )}
       </div>
-
     </div>
   );
 }
