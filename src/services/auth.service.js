@@ -8,7 +8,7 @@ export const loginService = async ({ username, password }) => {
     data.append("password", password);
 
     const res = await loginAPI(data);
-    console.log(res)
+    console.log(res.data)
 
     const token = res.data?.access_token;
 

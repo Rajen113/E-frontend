@@ -3,10 +3,10 @@ import { FaSearch, FaBell, FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from '../../../context/AuthContext';
+import { AdminContext } from '../../../context/AdminContext';
 
 function Header() {
- const { isLoggedIn, logout } = useContext(AuthContext)
+ const { isAdminLoggedIn, logout } = useContext(AdminContext)
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -33,7 +33,7 @@ function Header() {
       {/* RIGHT SIDE SECTION */}
       <div className="header-right">
 
-        {isLoggedIn ? (
+        {isAdminLoggedIn ? (
           <>
             {/* Show when ADMIN is logged in */}
             <FaBell className="icon" />
