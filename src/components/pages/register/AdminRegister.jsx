@@ -190,7 +190,7 @@ function AdminRegister() {
           <div className="divider">or</div>
 
           <p className="login-text">
-            Already have an account? <Link to="/login">Login</Link>
+            Already have an account? <Link to="/admin/login">Login</Link>
           </p>
 
         </div>

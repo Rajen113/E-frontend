@@ -6,6 +6,7 @@ import Layout from './components/layout/Layout'
 import About from './components/pages/about/About'
 import Register from './components/pages/register/Register'
 import Login from './components/pages/login/Login'
+import AdminLogin from './components/admin/login/AdminLogin'
 import Shop from './components/pages/shop/Shop'
 import Profile from './components/pages/profile/Profile'
 import Cart from './components/pages/cart/Cart'
@@ -33,7 +34,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin/register" element={<AdminRegister />} />
           <Route path="/login" element={<Login />} />
           <Route path='/shop' element={<Shop />} /> 
           <Route path='/profile' element={<Profile/>} /> 
@@ -46,20 +46,17 @@ function App() {
           </Route>
 
            <Route element={<AdminLayout/>}>
+            <Route path="/admin/register" element={<AdminRegister />} />
+             <Route path="/admin/login" element={<AdminLogin />} />
            <Route path="/admin/dashboard" element={<Admin/>} />
            <Route path="/admin/addProduct" element={<CreateProduct />} />
            <Route path="/admin/productList" element={<ProductList />} />
            <Route path="/admin/categoryList" element={<CategoryList />} />
            <Route path="/admin/createcategory" element={<CreateCategory />} />
             <Route path="/admin/orderList" element={<OrderList />} />
-           
-             <Route path="/admin/profile" element={<AdminProfile />} />
-
-        <Route path="/admin/editProduct/:id" element={<EditProduct />} />
-
-<Route path="/admin/editCategory/:id" element={<EditCategory />} />
-
-            
+            <Route path="/admin/profile" element={<AdminProfile />} />
+           <Route path="/admin/editProduct/:id" element={<EditProduct />} />
+           <Route path="/admin/editCategory/:id" element={<EditCategory />} />
 
            </Route>
       </Routes>

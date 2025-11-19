@@ -75,8 +75,16 @@ function Navbar() {
         ) : (
           <>
             <Link to="/login" className="nav-btn">Login</Link>
+             <Link
+                    to="/register"
+                    className="nav-btn"
+                    
+                  >
+                    👤 Register
+                  </Link>
 
-            <div className="dropdown" ref={dropdownRef}>
+           
+            {/* <div className="dropdown" ref={dropdownRef}>
               <button
                 onClick={handleDropdownToggle}
                 className={`nav-btn register ${showRegisterDropdown ? 'active' : ''}`}
@@ -103,7 +111,7 @@ function Navbar() {
                   </Link>
                 </div>
               )}
-            </div>
+            </div> */}
           </>
         )}
       </div>
