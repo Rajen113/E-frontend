@@ -13,7 +13,7 @@ export const loginService = async ({ username, password }) => {
     const token = res.data?.access_token;
 
     if (token) {
-      localStorage.setItem("authToken", token);
+      localStorage.setItem("token", token);
     }
 
     return { success: true, token, data: res.data };
@@ -25,6 +25,7 @@ export const loginService = async ({ username, password }) => {
     };
   }
 };
+
 
 export const registerService = async (userData) => {
   try {

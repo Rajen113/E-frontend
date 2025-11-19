@@ -11,63 +11,67 @@ export default function ProductDetails() {
   const { products, loading } = useContext(ProductContext);
   const { addToCart } = useContext(CartContext);
 
+  const API_BASE_URL = "http://192.168.29.249:8001";
+
   if (loading) return <h2 className="loading">Loading...</h2>;
 
   const product = products.find((p) => p.id === Number(id));
 
   if (!product) return <h2 className="not-found">Product Not Found</h2>;
 
+  const mainImageURL = `${API_BASE_URL}/${product.image_path[0].replace(/^\/+/, "")}`;
+
   const handleAdd = () => {
     addToCart({
       id: product.id,
-      name: product.title,
-      price: Math.round(product.price * 80),
-      img: product.thumbnail,
+      name: product.name,
+      price: product.price,
+      img: mainImageURL,
       qty: 1,
     });
     navigate("/cart");
   };
 
+  const handleThumbnailClick = (src) => {
+    document.querySelector(".main-image").src = src;
+  };
+
   return (
     <div className="details-container">
-      
-      {/* LEFT: Image gallery */}
+
+      {/* LEFT SECTION */}
       <div className="details-image-section">
-        <img className="main-image" src={product.thumbnail} alt={product.title} />
+        <img className="main-image" src={mainImageURL} alt={product.name} />
 
         <div className="image-list">
-          {product.images.map((img, i) => (
-            <img key={i} src={img} alt="" className="small-image" />
+          {product.image_path.map((img, i) => (
+            <img
+              key={i}
+              src={`${API_BASE_URL}/${img.replace(/^\/+/, "")}`}
+              alt="thumbnail"
+              className="small-image"
+              onClick={() =>
+                handleThumbnailClick(
+                  `${API_BASE_URL}/${img.replace(/^\/+/, "")}`
+                )
+              }
+            />
           ))}
         </div>
       </div>
 
-      {/* RIGHT: Info */}
+      {/* RIGHT SECTION */}
       <div className="details-info">
-        <h2>{product.title}</h2>
-        <p className="brand">Brand: <strong>{product.brand}</strong></p>
+        <h2>{product.name}</h2>
 
-        <p className="category">Category: {product.category}</p>
-
-        <p className="availability">
-          Status: <span>{product.availabilityStatus}</span>
+        <p className="category">
+          Category: <strong>{product.category?.category}</strong>
         </p>
 
-        <p className="details-price">
-          ₹{Math.round(product.price * 80)}{" "}
-          <span className="discount">({product.discountPercentage}% OFF)</span>
-        </p>
+        <p className="details-price">₹{product.price}</p>
 
-        <p className="stock">Stock: {product.stock}</p>
-
-        <p className="rating">⭐ {product.rating} / 5</p>
-
-        <p className="shipping">
-          Shipping: <strong>{product.shippingInformation}</strong>
-        </p>
-
-        <p className="warranty">
-          Warranty: <strong>{product.warrantyInformation}</strong>
+        <p className="stock">
+          Stock Available: <strong>{product.quantity}</strong>
         </p>
 
         <p className="details-desc">{product.description}</p>
