@@ -25,6 +25,8 @@ import OrderList from './components/admin/pages/Order/OrderList/OrderList'
 import EditCategory from './components/admin/pages/category/EditCategory'
 import EditProduct from './components/admin/pages/products/EditProduct'
 import AdminProfile from './components/admin/adminProfile/AdminProfile'
+import VendorDashboard from './components/admin/pages/dashboard/VendorDashboard'
+
 function App() {
   return (
     <BrowserRouter>
@@ -49,6 +51,7 @@ function App() {
             <Route path="/admin/register" element={<AdminRegister />} />
              <Route path="/admin/login" element={<AdminLogin />} />
            <Route path="/admin/dashboard" element={<Admin/>} />
+           <Route path="/admin/venderDashboard" element={<VendorDashboard />} />
            <Route path="/admin/addProduct" element={<CreateProduct />} />
            <Route path="/admin/productList" element={<ProductList />} />
            <Route path="/admin/categoryList" element={<CategoryList />} />
