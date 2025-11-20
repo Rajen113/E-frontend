@@ -1,22 +1,25 @@
-import React, { useContext } from "react";
-import { FaSearch, FaBell, FaUser } from "react-icons/fa";
+import React, { useContext, useState } from "react";
+import { FaSearch, FaBell, FaUser, FaSignOutAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-import { AdminContext } from '../../../context/AdminContext';
+import { AdminContext } from "../../../context/AdminContext";
 
 function Header() {
- const { isAdminLoggedIn, logout } = useContext(AdminContext)
+  const { isAdminLoggedIn, logout } = useContext(AdminContext);
   const navigate = useNavigate();
 
+  // toggle for login/register buttons
+  const [showRegister, setShowRegister] = useState(false);
+
   const handleLogout = () => {
-    logout()
+    logout();
     navigate("/admin/login");
   };
 
   return (
-    <div className="header">
-      {/* Logo Section */}
+    <div className="admin-header">
+      {/* Logo */}
       <div className="navbar-logo">
         <div className="logo-text">
           <span className="brand-main">Shop</span>
@@ -24,44 +27,52 @@ function Header() {
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className="search-box">
-        <FaSearch />
-        <input type="text" placeholder="Search anything..." />
-      </div>
 
-      {/* RIGHT SIDE SECTION */}
       <div className="header-right">
 
-        {isLoggedIn ? (
+        {isAdminLoggedIn ? (
           <>
-            {/* Show when ADMIN is logged in */}
-            <FaBell className="icon" />
-            <MdEmail className="icon" />
+            <FaBell className="icon bounce" />
+            <MdEmail className="icon bounce" />
 
-            <Link to="/admin/profile">
-              <FaUser className="icon" />
+            <Link to="/admin/profile" className="icon-link">
+              <FaUser className="icon bounce" />
             </Link>
 
             <button onClick={handleLogout} className="logout-btn">
-              Logout
+              <FaSignOutAlt /> Logout
             </button>
           </>
         ) : (
           <>
-            {/* Show when NOT logged in */}
-            <Link to="/admin/login" className="icon-link">
-              <FaUser className="icon" /> Login
-            </Link>
+            {/* LOGIN visible first */}
+            {!showRegister && (
+              <Link
+                to="/admin/login"
+                className="icon-link"
+                onClick={() => setShowRegister(true)}
+              >
+                <FaUser className="icon" /> Login
+              </Link>
+            )}
 
-            <Link to="/admin/register" className="icon-link">
-              <FaUser className="icon" /> Register
-            </Link>
+            {/* REGISTER visible after clicking Login */}
+            {showRegister && (
+              <Link
+                to="/admin/register"
+                className="icon-link"
+                onClick={() => setShowRegister(false)}
+              >
+                <FaUser className="icon" /> Register
+              </Link>
+            )}
           </>
         )}
+
       </div>
-    </div>
-  );
+      </div>
+
+      );
 }
 
-export default Header;
+      export default Header;

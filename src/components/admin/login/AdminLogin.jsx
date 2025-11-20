@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AdminContext } from "../../../context/AdminContext";
 import { adminLoginService } from "../../../services/admin.service";
 import "./AdminLogin.css";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ function AdminLogin() {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,6 @@ function AdminLogin() {
     setLoading(true);
 
     const response = await adminLoginService(formData);
-
     setLoading(false);
 
     if (!response.success) {
@@ -39,57 +39,70 @@ function AdminLogin() {
 
     // Save token to Context & localStorage
     login(response.token);
-
-
     setSuccess("Login successful! Redirecting...");
     setTimeout(() => navigate("/admin/dashboard"), 1500);
   };
 
   return (
     <div className="login-page">
-      <div className="img-login">
-        <img src="/register.png" alt="login Illustration" />
+
+    
+      <div className="login-left">
+        <img src="/login-illustration.webp" alt="Login Illustration" />
       </div>
 
-      <div className="login-container">
+      <div className="login-right">
         <div className="login-box">
           <h2><FaUser /> Login Account</h2>
+          <p className="subtitle">Welcome back! Please enter your details.</p>
 
+<div className="form-data">
           <form onSubmit={handleSubmit}>
             {error && <p className="error-text">{error}</p>}
             {success && <p className="success-text">{success}</p>}
 
-            <input
-              type="email"
-              name="Email"
-              placeholder="Email"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
+            <div className="field">
+              <input
+                type="email"
+                name="Email"
+                placeholder="Email"
+                value={formData.Email}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <div className="field password-wrap">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
 
-            <button type="submit" className="create-btn" disabled={loading}>
+            <button type="submit" className="login-btn" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>
 
             <div className="divider">or</div>
 
-            <p className="login-link">
-              Don’t have an account?{" "}
-              <Link to="/admin/register"><FaUser /> Register</Link>
+            <p className="register-text">
+              Don’t have an account? <Link to="/admin/register">Register</Link>
             </p>
-          </form>
+          </form></div>
         </div>
       </div>
+
     </div>
   );
 }
