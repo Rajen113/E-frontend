@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       setIsLoggedIn(true);
     } catch (err) {
-      console.log("Failed to load user profile:", err);
       setIsLoggedIn(false);
       setUser(null);
     }
@@ -26,7 +25,6 @@ export const AuthProvider = ({ children }) => {
     loadUserProfile();
   }, []);
 
-  console.log(user)
   
   const login = (token) => {
     localStorage.setItem("authToken", token);
