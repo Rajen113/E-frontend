@@ -37,6 +37,7 @@ function AdminLogin() {
       return;
     }
 
+    // Save token to Context & localStorage
     login(response.token);
     setSuccess("Login successful! Redirecting...");
     setTimeout(() => navigate("/admin/dashboard"), 1500);
