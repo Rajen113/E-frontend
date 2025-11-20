@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ProductContext } from "../../../context/ProductContext";
 import { CartContext } from "../../../context/CartContext";
+import { AuthContext } from "../../../context/AuthContext";
+import { ToastContext } from "../../../context/ToastContext";
 import "./ProductDetails.css";
 
 export default function ProductDetails() {
@@ -10,75 +12,159 @@ export default function ProductDetails() {
 
   const { products, loading } = useContext(ProductContext);
   const { addToCart } = useContext(CartContext);
+  const { isLoggedIn } = useContext(AuthContext);
+  const { showToast } = useContext(ToastContext);
 
-  const API_BASE_URL = "http://192.168.29.249:8001";
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+
+  const API_BASE_URL = import.meta.env.VITE_PRODUCT_URL || "http://192.168.29.249:8001";
 
   if (loading) return <h2 className="loading">Loading...</h2>;
 
   const product = products.find((p) => p.id === Number(id));
 
-  if (!product) return <h2 className="not-found">Product Not Found</h2>;
+  if (!product) return <h2 className="not-found">Product Not Found 😕</h2>;
 
-  const mainImageURL = `${API_BASE_URL}/${product.image_path[0].replace(/^\/+/, "")}`;
+  const images = product.image_path.map(
+    (img) => `${API_BASE_URL}/${img.replace(/^\/+/, "")}`
+  );
 
-  const handleAdd = () => {
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      img: mainImageURL,
-      qty: 1,
-    });
+  const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      showToast("Please login to add items to cart");
+      return navigate("/login");
+    }
+    
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product.id);
+    }
+    
+    showToast(`🛒 ${quantity} item(s) added to cart!`);
+  };
+
+  const handleBuyNow = () => {
+    if (!isLoggedIn) {
+      showToast("Please login to continue");
+      return navigate("/login");
+    }
+    
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product.id);
+    }
+    
     navigate("/cart");
   };
 
-  const handleThumbnailClick = (src) => {
-    document.querySelector(".main-image").src = src;
+  const incrementQty = () => {
+    if (quantity < product.quantity) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const decrementQty = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   };
 
   return (
-    <div className="details-container">
+    <div className="product-details-page">
+      <div className="details-container">
 
-      {/* LEFT SECTION */}
-      <div className="details-image-section">
-        <img className="main-image" src={mainImageURL} alt={product.name} />
-
-        <div className="image-list">
-          {product.image_path.map((img, i) => (
+        {/* LEFT - IMAGE GALLERY */}
+        <div className="details-image-section">
+          <div className="main-image-wrapper">
             <img
-              key={i}
-              src={`${API_BASE_URL}/${img.replace(/^\/+/, "")}`}
-              alt="thumbnail"
-              className="small-image"
-              onClick={() =>
-                handleThumbnailClick(
-                  `${API_BASE_URL}/${img.replace(/^\/+/, "")}`
-                )
-              }
+              className="main-image"
+              src={images[selectedImage]}
+              alt={product.name}
             />
-          ))}
+          </div>
+
+          <div className="image-thumbnails">
+            {images.map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                alt={`${product.name} ${i + 1}`}
+                className={`thumbnail ${selectedImage === i ? "active" : ""}`}
+                onClick={() => setSelectedImage(i)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* RIGHT SECTION */}
-      <div className="details-info">
-        <h2>{product.name}</h2>
+        {/* RIGHT - PRODUCT INFO */}
+        <div className="details-info">
+          <div className="product-header">
+            <h1>{product.name}</h1>
+            
+            <div className="category-badge">
+              {product.category?.category || "Uncategorized"}
+            </div>
+          </div>
 
-        <p className="category">
-          Category: <strong>{product.category?.category}</strong>
-        </p>
+          <div className="price-section">
+            <p className="current-price">₹{product.price}</p>
+            {product.original_price && (
+              <p className="original-price">₹{product.original_price}</p>
+            )}
+          </div>
 
-        <p className="details-price">₹{product.price}</p>
+          <div className="stock-info">
+            {product.quantity > 0 ? (
+              <span className="in-stock">✓ In Stock ({product.quantity} available)</span>
+            ) : (
+              <span className="out-of-stock">✗ Out of Stock</span>
+            )}
+          </div>
 
-        <p className="stock">
-          Stock Available: <strong>{product.quantity}</strong>
-        </p>
+          <p className="product-description">{product.description}</p>
 
-        <p className="details-desc">{product.description}</p>
+          {/* QUANTITY SELECTOR */}
+          <div className="quantity-section">
+            <label>Quantity:</label>
+            <div className="quantity-controls">
+              <button onClick={decrementQty} disabled={quantity <= 1}>−</button>
+              <input type="number" value={quantity} readOnly />
+              <button onClick={incrementQty} disabled={quantity >= product.quantity}>+</button>
+            </div>
+          </div>
 
-        <button className="details-btn" onClick={handleAdd}>
-          Add to Cart
-        </button>
+          {/* ACTION BUTTONS */}
+          <div className="action-buttons">
+            <button 
+              className="add-to-cart-btn" 
+              onClick={handleAddToCart}
+              disabled={product.quantity === 0}
+            >
+              🛒 Add to Cart
+            </button>
+            <button 
+              className="buy-now-btn" 
+              onClick={handleBuyNow}
+              disabled={product.quantity === 0}
+            >
+              Buy Now
+            </button>
+          </div>
+
+          {/* PRODUCT SPECS */}
+          {product.specifications && (
+            <div className="product-specs">
+              <h3>Specifications</h3>
+              <ul>
+                {Object.entries(product.specifications).map(([key, value]) => (
+                  <li key={key}>
+                    <strong>{key}:</strong> {value}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

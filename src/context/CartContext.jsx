@@ -47,7 +47,7 @@ export const CartProvider = ({ children }) => {
       productCache[product_id] = res.data;
       return res.data;
     } catch (err) {
-      console.error("Product fetch failed:", err);
+      // console.error("Product fetch failed:", err);
       return null;
     }
   };

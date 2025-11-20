@@ -1,0 +1,348 @@
+/* ---------- ORDER DETAILS PAGE ---------- */
+.order-details-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 30px 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- LOADING & ERROR ---------- */
+.loading-page,
+.error-page {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.loading-page {
+  font-size: 18px;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.error-page h2 {
+  font-size: 24px;
+  color: #333;
+}
+
+.back-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  color: #764ba2;
+}
+
+/* ---------- HEADER ---------- */
+.details-header {
+  background: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.back-btn {
+  background: #f0f4ff;
+  color: #667eea;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  font-family: "Poppins", sans-serif;
+}
+
+.back-btn:hover {
+  background: #667eea;
+  color: white;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+/* ---------- STATUS PILL ---------- */
+.status-pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-pill.pending {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-pill.processing {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-pill.shipped {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.status-pill.delivered {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-pill.cancelled {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+/* ---------- GRID LAYOUT ---------- */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 25px;
+}
+
+/* ---------- INFO CARDS ---------- */
+.info-card,
+.summary-card,
+.user-card,
+.shipping-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.info-card h2,
+.summary-card h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.user-card h3,
+.shipping-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- INFO ROWS ---------- */
+.info-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  text-align: right;
+}
+
+.info-value.highlight {
+  color: #667eea;
+  font-weight: 700;
+}
+
+/* ---------- ADDRESS BOX ---------- */
+.address-box {
+  background: #f8f9fa;
+  padding: 18px;
+  border-radius: 10px;
+}
+
+.address-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.address-line {
+  font-size: 14px;
+  color: #666;
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+/* ---------- SUMMARY ---------- */
+.summary-rows {
+  margin-bottom: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 15px;
+  color: #666;
+}
+
+.summary-row span:last-child {
+  font-weight: 600;
+  color: #333;
+}
+
+.summary-row.total {
+  margin-top: 10px;
+  padding-top: 15px;
+  border-top: 2px solid #f0f0f0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.summary-row.total span:last-child {
+  color: #667eea;
+  font-size: 24px;
+}
+
+/* ---------- PAYMENT INFO ---------- */
+.payment-info,
+.payment-pending {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.payment-info p {
+  font-size: 13px;
+  color: #666;
+  margin: 8px 0;
+}
+
+.payment-pending p {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  margin: 0;
+}
+
+/* ---------- USER & SHIPPING ---------- */
+.user-email {
+  font-size: 15px;
+  color: #667eea;
+  font-weight: 600;
+  margin: 0;
+}
+
+.shipping-method {
+  font-size: 15px;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 968px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .right-column {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .order-details-page {
+    padding: 20px 15px;
+  }
+
+  .details-header {
+    padding: 18px 20px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .header-content h1 {
+    font-size: 24px;
+  }
+
+  .info-card,
+  .summary-card,
+  .user-card,
+  .shipping-card {
+    padding: 20px;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .info-value {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content h1 {
+    font-size: 20px;
+  }
+
+  .summary-row.total {
+    font-size: 16px;
+  }
+
+  .summary-row.total span:last-child {
+    font-size: 20px;
+  }
+}
