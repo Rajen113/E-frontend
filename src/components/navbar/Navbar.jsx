@@ -1,42 +1,38 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext'
-import './Navbar.css'
-import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
-import { FiLogOut } from "react-icons/fi"
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import "./Navbar.css";
+
+import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
 function Navbar() {
-  const { isLoggedIn, logout } = useContext(AuthContext)
-  const navigate = useNavigate()
+  const { isLoggedIn, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const [showRegisterDropdown, setShowRegisterDropdown] = useState(false)
-  const dropdownRef = useRef(null)
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
+    logout();
+    navigate("/login");
+  };
 
-  const handleDropdownToggle = () => {
-    setShowRegisterDropdown(!showRegisterDropdown)
-  }
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowRegisterDropdown(false)
-      }
+  const handleSearch = () => {
+    if (search.trim() === "") {
+      navigate("/shop");
+      return;
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+    navigate(`/shop?search=${search}`);
+  };
 
+  useEffect(()=>{
+    handleSearch()
+  },[search])
   return (
     <nav className="navbar">
 
-      {/* Left: Logo */}
+      {/* LOGO */}
       <div className="navbar-logo">
         <Link to="/" className="logo-text">
           <span className="brand-main">Shop</span>
@@ -44,19 +40,22 @@ function Navbar() {
         </Link>
       </div>
 
-      {/* Center: Search Bar */}
+      {/* SEARCH BAR */}
       <div className="navbar-search">
         <input
           type="text"
-          placeholder="Search for products, brands, and more..."
           className="search-input"
+          placeholder="Search products..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <button className="search-btn">
+        <button className="search-btn" onClick={handleSearch}>
           <FaSearch />
         </button>
       </div>
 
-      {/* Right: Actions */}
+      {/* DESKTOP BUTTONS */}
       <div className="navbar-actions">
         {isLoggedIn ? (
           <>
@@ -64,59 +63,85 @@ function Navbar() {
               <FaUser /> Profile
             </Link>
 
-            <button onClick={handleLogout} className="nav-btn logout">
-              <FiLogOut /> Logout
-            </button>
-
-            <Link to="/cart" className="nav-btn cart">
+            <Link to="/cart" className="nav-btn">
               <FaShoppingCart /> Cart
             </Link>
+
+            <button className="nav-btn logout-btn" onClick={handleLogout}>
+              <FiLogOut /> Logout
+            </button>
           </>
         ) : (
           <>
             <Link to="/login" className="nav-btn">Login</Link>
-             <Link
-                    to="/register"
-                    className="nav-btn"
-                    
-                  >
-                    👤 Register
-                  </Link>
-
-           
-            {/* <div className="dropdown" ref={dropdownRef}>
-              <button
-                onClick={handleDropdownToggle}
-                className={`nav-btn register ${showRegisterDropdown ? 'active' : ''}`}
-              >
-                Register
-              </button>
-
-              {showRegisterDropdown && (
-                <div className="dropdown-menu">
-                  <Link
-                    to="/register"
-                    className="dropdown-item"
-                    onClick={() => setShowRegisterDropdown(false)}
-                  >
-                    👤 User Register
-                  </Link>
-
-                  <Link
-                    to="/admin/register"
-                    className="dropdown-item"
-                    onClick={() => setShowRegisterDropdown(false)}
-                  >
-                    🧑‍💼 Admin Register
-                  </Link>
-                </div>
-              )}
-            </div> */}
+            <Link to="/register" className="nav-btn">Register</Link>
           </>
         )}
       </div>
+
+      {/* MOBILE MENU BUTTON */}
+      <button
+        className="mobile-menu-btn"
+        onClick={() => setMobileOpen(!mobileOpen)}
+      >
+        ☰
+      </button>
+
+      {/* MOBILE MENU */}
+      {mobileOpen && (
+        <div className="mobile-menu">
+          {isLoggedIn ? (
+            <>
+              <Link
+                to="/profile"
+                className="mobile-item"
+                onClick={() => setMobileOpen(false)}
+              >
+                Profile
+              </Link>
+
+              <Link
+                to="/cart"
+                className="mobile-item"
+                onClick={() => setMobileOpen(false)}
+              >
+                Cart
+              </Link>
+
+              <button
+                className="mobile-item logout-btn"
+                onClick={() => {
+                  setMobileOpen(false);
+                  handleLogout();
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="mobile-item"
+                onClick={() => setMobileOpen(false)}
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/register"
+                className="mobile-item"
+                onClick={() => setMobileOpen(false)}
+              >
+                Register
+              </Link>
+            </>
+          )}
+        </div>
+      )}
+
     </nav>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

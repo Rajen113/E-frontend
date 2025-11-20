@@ -9,7 +9,7 @@ function Home() {
 
       {/* Hero Section */}
       <section className="hero-section">
-        <ImageSlider />   {/*  Auto-swiping banner */}
+        <ImageSlider />
         <div className="hero-overlay">
           <div className="hero-content">
             <h1>Discover the Latest Trends</h1>
@@ -36,35 +36,35 @@ function Home() {
 
         <div className="categories">
 
-          <div className="cat-box">
+          <Link to="/shop?category=Phones" className="cat-box">
             <img src="/Category-CellPhone.png" alt="Phones" />
             <p>Phones</p>
-          </div>
+          </Link>
 
-          <div className="cat-box">
+          <Link to="/shop?category=Computers" className="cat-box">
             <img src="/Category-Computer.png" alt="Computers" />
             <p>Computers</p>
-          </div>
+          </Link>
 
-          <div className="cat-box">
+          <Link to="/shop?category=Smartwatch" className="cat-box">
             <img src="/Category-SmartWatch.png" alt="Smartwatch" />
             <p>Smartwatch</p>
-          </div>
+          </Link>
 
-          <div className="cat-box">
+          <Link to="/shop?category=Camera" className="cat-box">
             <img src="/Category-Camera.png" alt="Camera" />
             <p>Camera</p>
-          </div>
+          </Link>
 
-          <div className="cat-box">
+          <Link to="/shop?category=Headphones" className="cat-box">
             <img src="/Category-Headphone.png" alt="Headphone" />
             <p>Headphones</p>
-          </div>
+          </Link>
 
-          <div className="cat-box">
+          <Link to="/shop?category=Games" className="cat-box">
             <img src="/Category-Gamepad.png" alt="Game" />
             <p>Games</p>
-          </div>
+          </Link>
 
         </div>
       </div>
@@ -77,52 +77,51 @@ function Home() {
         <div className="category-header">
           <h1>Best Selling Products</h1>
 
-          <div className="All-view">
-            <p>View All</p>
-          </div>
+          <Link to="/shop" className="All-view">
+            View All
+          </Link>
         </div>
 
         <div className="categories">
 
-          <div className="product-card">
+          <Link to="/shop" className="product-card">
             <img src="/jacket.png" alt="jacket" />
             <h3>The north coat</h3>
             <p>$230</p>
             <button>Add to Cart</button>
-          </div>
+          </Link>
 
-          <div className="product-card">
+          <Link to="/shop" className="product-card">
             <img src="/purse.png" alt="purse" />
             <h3>Gucci duffle bag</h3>
             <p>$230</p>
             <button>Add to Cart</button>
-          </div>
+          </Link>
 
-          <div className="product-card">
+          <Link to="/shop" className="product-card">
             <img src="/gammaxx.png" alt="gammaxx" />
             <h3>RGB liquid CPU</h3>
             <p>$230</p>
             <button>Add to Cart</button>
-          </div>
+          </Link>
 
-          <div className="product-card">
+          <Link to="/shop" className="product-card">
             <img src="/table.png" alt="table" />
             <h3>Small BookSelf</h3>
             <p>$230</p>
             <button>Add to Cart</button>
-          </div>
+          </Link>
 
-          <div className="product-card">
+          <Link to="/shop" className="product-card">
             <img src="/computer.png" alt="computer" />
             <h3>Computers</h3>
             <p>$230</p>
             <button>Add to Cart</button>
-          </div>
+          </Link>
 
         </div>
       </section>
 
-  
       <div className="radio-wrapper">
         <img src="/radio.png" className="radio-full-img" alt="radio" />
         <button className="buy-btn">Buy Now!</button>
@@ -130,7 +129,7 @@ function Home() {
 
       <hr />
 
-     
+      {/* Featured Section */}
       <div className="features">
         <h2>Featured</h2>
 

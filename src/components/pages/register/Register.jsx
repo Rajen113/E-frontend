@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { registerService } from "../../../services/auth.service";
 
 function Register() {
@@ -19,13 +19,17 @@ function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Password visibility states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
     setSuccess("");
   };
 
-  //FORM VALIDATION
+  // FORM VALIDATION
   const validateFields = () => {
     if (!/^[A-Za-z ]{3,}$/.test(formData.name))
       return "Full Name must be at least 3 characters and only contain letters.";
@@ -81,10 +85,9 @@ function Register() {
 
   return (
     <div className="signup-page">
+
       <div className="img-signup">
-        {/* <div className="left-img"> */}
-          <img src="SideImage.png" alt="Register Illustration" />
-        {/* </div> */}
+        <img src="SideImage.png" alt="Register Illustration" />
       </div>
 
       <div className="signup-container">
@@ -122,25 +125,49 @@ function Register() {
               required
             />
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            {/* Password Field */}
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
 
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+              <span
+                className="toggle-eye"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
 
-            <button type="submit" className="create-btn" disabled={loading}>
+            {/* Confirm Password Field */}
+            <div className="password-field">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+
+              <span
+                className="toggle-eye"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              className="create-btn"
+              disabled={loading}
+            >
               {loading ? "Registering..." : "Sign Up"}
             </button>
           </form>
@@ -152,6 +179,7 @@ function Register() {
           </p>
         </div>
       </div>
+
     </div>
   );
 }
