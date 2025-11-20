@@ -48,27 +48,12 @@ function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/orders" element={<OrderHistory />} />
           <Route path="/orders/:orderId" element={<OrderDetails />} />
-
-           <Route element={<AdminLayout/>}>
-            <Route path="/admin/register" element={<AdminRegister />} />
-             <Route path="/admin/login" element={<AdminLogin />} />
-           <Route path="/admin/dashboard" element={<Admin/>} />
-           <Route path="/admin/venderDashboard" element={<VendorDashboard />} />
-           <Route path="/admin/addProduct" element={<CreateProduct />} />
-           <Route path="/admin/productList" element={<ProductList />} />
-           <Route path="/admin/categoryList" element={<CategoryList />} />
-           <Route path="/admin/createcategory" element={<CreateCategory />} />
-            <Route path="/admin/orderList" element={<OrderList />} />
-            <Route path="/admin/profile" element={<AdminProfile />} />
-           <Route path="/admin/editProduct/:id" element={<EditProduct />} />
-           <Route path="/admin/editCategory/:id" element={<EditCategory />} />
-
         </Route>
-
         <Route element={<AdminLayout />}>
           <Route path="/admin/register" element={<AdminRegister />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<Admin />} />
+          <Route path="/admin/venderDashboard" element={<VendorDashboard />} />
           <Route path="/admin/addProduct" element={<CreateProduct />} />
           <Route path="/admin/productList" element={<ProductList />} />
           <Route path="/admin/categoryList" element={<CategoryList />} />
@@ -79,6 +64,7 @@ function App() {
           <Route path="/admin/editCategory/:id" element={<EditCategory />} />
 
         </Route>
+
       </Routes>
     </BrowserRouter>
   )
