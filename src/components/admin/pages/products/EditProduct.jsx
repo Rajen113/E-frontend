@@ -88,12 +88,17 @@ function EditProduct() {
   };
 
   return (
+  <div className="edit-product-page">
     <div className="add-product-container">
-      <h2>Edit Product</h2>
+
+      <div className="page-header">
+        <h2>
+         Edit Product
+        </h2>
+      </div>
 
       <form className="product-form" onSubmit={handleSubmit}>
         
-        {/* Name */}
         <div className="form-group">
           <label>Product Name</label>
           <input
@@ -105,7 +110,6 @@ function EditProduct() {
           />
         </div>
 
-        {/* Category */}
         <div className="form-group">
           <label>Category</label>
           <select
@@ -124,7 +128,6 @@ function EditProduct() {
           </select>
         </div>
 
-        {/* Quantity */}
         <div className="form-group">
           <label>Quantity</label>
           <input
@@ -137,7 +140,6 @@ function EditProduct() {
           />
         </div>
 
-        {/* Price */}
         <div className="form-group">
           <label>Price</label>
           <input
@@ -150,7 +152,6 @@ function EditProduct() {
           />
         </div>
 
-        {/* Description */}
         <div className="form-group description-box">
           <label>Description</label>
           <textarea
@@ -162,7 +163,6 @@ function EditProduct() {
           ></textarea>
         </div>
 
-        {/* Image */}
         <div className="form-group">
           <label>Product Image</label>
 
@@ -179,8 +179,11 @@ function EditProduct() {
 
         <button className="btn-submit">Save Changes</button>
       </form>
+
     </div>
-  );
+  </div>
+);
+
 }
 
 export default EditProduct;

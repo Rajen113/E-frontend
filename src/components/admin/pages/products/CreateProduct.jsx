@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CreateProduct.css";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function CreateProduct() {
   const navigate = useNavigate();
 
@@ -50,9 +51,9 @@ function CreateProduct() {
       form.append(key, formData[key]);
     });
 
-    // Append images (multiple)
+
     images.forEach((img) => {
-      form.append("images", img); // Backend must use getlist("image_path")
+      form.append("images", img);
     });
 
     try {
@@ -67,8 +68,6 @@ function CreateProduct() {
       );
 
       console.log("Response:", response.data);
-
-      alert("Product added successfully!");
       navigate("/admin/productList");
     } catch (error) {
       console.log("Upload error:", error);
@@ -77,109 +76,113 @@ function CreateProduct() {
   };
 
   return (
-    <div className="add-product-container">
-      <h2>Add New Product</h2>
-
-      <form className="product-form" onSubmit={handleSubmit}>
-        
-        {/* Product Name */}
-        <div className="form-group">
-          <label>Product Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            placeholder="Enter Product Name"
-            onChange={handleChange}
-            required
-          />
+    <div className="add-product-page">
+      <div className="add-product-container">
+        <div className="page-header">
+          <h2>
+            Add New Product
+          </h2>
         </div>
+        <form className="product-form" onSubmit={handleSubmit}>
 
-        {/* Category */}
-        <div className="form-group">
-          <label>Select Category</label>
-          <select
-            name="category_id"
-            value={formData.category_id}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((c) => (
-              <option value={c.id} key={c.id}>
-                {c.category}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Quantity */}
-        <div className="form-group">
-          <label>Quantity</label>
-          <input
-            type="number"
-            name="quantity"
-            value={formData.quantity}
-            placeholder="Enter Quantity"
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Price */}
-        <div className="form-group">
-          <label>Price</label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            placeholder="Enter Price"
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Description */}
-        <div className="form-group description-box">
-          <label>Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Enter Description"
-            required
-          ></textarea>
-        </div>
-
-        {/* Image Upload */}
-        <div className="form-group">
-          <label>Upload Images</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageUpload}
-          />
-        </div>
-
-        {/* Preview */}
-        {imagePreview.length > 0 && (
-          <div className="preview-container">
-            {imagePreview.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                className="product-preview"
-                alt="Preview"
-              />
-            ))}
+          <div className="form-group">
+            <label>Product Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              placeholder="Enter Product Name"
+              onChange={handleChange}
+              required
+            />
           </div>
-        )}
 
-        <button type="submit" className="btn-submit">
-          Add Product
-        </button>
-      </form>
+
+          <div className="form-group">
+            <label>Select Category</label>
+            <select
+              name="category_id"
+              value={formData.category_id}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option value={c.id} key={c.id}>
+                  {c.category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+
+          <div className="form-group">
+            <label>Quantity</label>
+            <input
+              type="number"
+              name="quantity"
+              value={formData.quantity}
+              placeholder="Enter Quantity"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+
+          <div className="form-group">
+            <label>Price</label>
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              placeholder="Enter Price"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Enter Description"
+              required
+            ></textarea>
+          </div>
+
+
+          <div className="form-group">
+            <label>Upload Images</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageUpload}
+            />
+          </div>
+
+          {/* Preview */}
+          {imagePreview.length > 0 && (
+            <div className="preview-container">
+              {imagePreview.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  className="product-preview"
+                  alt="Preview"
+                />
+              ))}
+            </div>
+          )}
+
+          <button type="submit" className="btn-submit">
+            Add Product
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
