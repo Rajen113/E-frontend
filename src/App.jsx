@@ -27,6 +27,8 @@ import AdminProfile from './components/admin/adminProfile/AdminProfile'
 import OrderSuccess from './components/pages/order/OrderSuccess'
 import OrderHistory from './components/pages/order/OrderHistory'
 import OrderDetails from './components/pages/order/OrderDetails'
+import VendorDashboard from './components/admin/pages/dashboard/VendorDashboard'
+
 function App() {
   return (
     <BrowserRouter>
@@ -46,14 +48,12 @@ function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/orders" element={<OrderHistory />} />
           <Route path="/orders/:orderId" element={<OrderDetails />} />
-
-
         </Route>
-
         <Route element={<AdminLayout />}>
           <Route path="/admin/register" element={<AdminRegister />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<Admin />} />
+          <Route path="/admin/venderDashboard" element={<VendorDashboard />} />
           <Route path="/admin/addProduct" element={<CreateProduct />} />
           <Route path="/admin/productList" element={<ProductList />} />
           <Route path="/admin/categoryList" element={<CategoryList />} />
@@ -64,6 +64,7 @@ function App() {
           <Route path="/admin/editCategory/:id" element={<EditCategory />} />
 
         </Route>
+
       </Routes>
     </BrowserRouter>
   )

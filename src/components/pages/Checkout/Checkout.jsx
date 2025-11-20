@@ -21,9 +21,14 @@ export default function Checkout() {
 
   useEffect(() => {
     if (!isLoggedIn) navigate("/login");
+  }, [isLoggedIn]);
+
+  // Redirect if cart empty
+  useEffect(() => {
     if (cart.length === 0) navigate("/cart");
   }, [isLoggedIn, cart, navigate]);
 
+  // PRICE CALCULATION
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shipping = subtotal > 500 ? 0 : 50;
   const total = subtotal + shipping;
@@ -162,6 +167,7 @@ export default function Checkout() {
           </button>
 
         </div>
+
       </div>
     </div>
   );

@@ -1,156 +1,139 @@
+/* MAIN WRAPPER */
 .profile-wrapper {
+  width: 100%;
   display: flex;
-  width: 80%;
-  height: 100vh;
-  background: #b6a1a1;
-box-shadow: 0 0 10px rgba(46, 47, 48, 0.3);
-
-}
-
-.profile-right {
-  flex: 1.8;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  background: white;
   padding: 30px;
-
 }
 
-.profile-form {
-  width: 90%;
-  max-width: 600px;
+/* PROFILE CARD */
+.profile-box {
+  width: 100%;
+  max-width: 550px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid #e1e4ef;
+  box-shadow: 0 6px 25px rgba(0, 0, 50, 0.08);
+
+  animation: fadeUp 0.5s ease;
 }
 
-.profile-form h2 {
+/* HEADING */
+.title {
+  font-size: 24px;
   text-align: center;
+  font-weight: 700;
   margin-bottom: 20px;
-  font-weight: bold;
-  color: #333;
+  color: #3a3f52;
 }
 
-
-.profile-photo {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.profile-img {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #4a90e2;
-  margin-bottom: 10px;
-}
-
-.upload-label {
-  display: inline-block;
-  padding: 8px 14px;
-  background: #4a90e2;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.upload-label input {
-  display: none;
-}
-
-
+/* INPUT GROUP */
 .profile-fields {
   display: flex;
-  gap: 20px;
-}
-
-.fields {
-  flex: 1;
-  display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
-.fields input,
-.fields textarea {
-  padding: 12px;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  font-size: 15px;
-  outline: none;
-  transition: 0.2s;
+/* INPUT */
+.profile-fields input {
+  padding: 12px 12px;
+  border: 1px solid #cdd3e3;
+  border-radius: 10px;
+  background: #f9fbff;
+  font-size: 14px;
+  color: #2b3042;
+  transition: 0.25s ease;
 }
 
-.fields textarea {
-  height: 100px;
-  resize: none;
+.profile-fields input:focus {
+  border-color: #6a11cb;
+  box-shadow: 0 0 6px rgba(80, 60, 220, 0.25);
+  background: white;
 }
 
-.fields input:focus,
-.fields textarea:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+/* READONLY DISABLED STYLE */
+.profile-fields input[readonly] {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-
-/* Buttons */
+/* BUTTON GROUP */
 .form-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-top: 15px;
+  margin-top: 20px;
+  gap: 12px;
 }
 
-.btn-edit,
-.btn-save,
-.btn-cancel {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-/* Edit */
+/* EDIT */
 .btn-edit {
-  background-color: #ff6600;
+  background: #5b8efc;
   color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
+
 .btn-edit:hover {
-  background-color: #e65c00;
+  background: #3b6ef0;
 }
 
-/* Save */
+/* SAVE */
 .btn-save {
-  background-color: #28a745;
+  background: #28a745;
   color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
+
 .btn-save:hover {
-  background-color: #218838;
+  background: #1e8e38;
 }
 
-/* Cancel */
+/* CANCEL */
 .btn-cancel {
-  background-color: #ccc;
+  background: #d6d6d6;
   color: #333;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
 }
+
 .btn-cancel:hover {
-  background-color: #b3b3b3;
+  background: #bbbbbb;
 }
 
+/* LOADING */
+.loading {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 20px;
+  font-weight: 600;
+}
 
-@media (max-width: 850px) {
-  .profile-wrapper {
-    flex-direction: column;
-    height: auto;
-  }
+/* ANIMATION */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  .profile-left {
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .profile-box {
     padding: 20px;
   }
 
-  .profile-fields {
-    flex-direction: column;
+  .title {
+    font-size: 20px;
   }
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './AdminRegister.css'
-import { FaUser } from "react-icons/fa"
+import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa"
 import { adminRegisterService } from '../../../services/admin.service'
 
 function AdminRegister() {
@@ -20,6 +20,10 @@ function AdminRegister() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Password Toggle States
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const idValidations = {
     "Aadhaar": /^\d{12}$/,
@@ -67,7 +71,6 @@ function AdminRegister() {
 
     setLoading(true)
 
-    // Service Call
     const response = await adminRegisterService(adminData)
 
     setLoading(false)
@@ -98,72 +101,70 @@ function AdminRegister() {
 
             <div className="field-box">
 
-              {/* LEFT COLUMN */}
-              <div className="fields">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Full Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
+              {/* INPUT GROUPS */}
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
 
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
 
-                <input
-                  type="text"
-                  name="mobile_number"
-                  placeholder="Mobile Number"
-                  value={formData.mobile_number}
-                  onChange={handleChange}
-                  required
-                />
+              <input
+                type="text"
+                name="mobile_number"
+                placeholder="Mobile Number"
+                value={formData.mobile_number}
+                onChange={handleChange}
+                required
+              />
 
-                <select
-                  name="goverment_id"
-                  value={formData.goverment_id}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Government ID</option>
-                  <option value="Aadhaar">Aadhaar</option>
-                  <option value="Voter ID">Voter ID</option>
-                  <option value="PAN Card">PAN Card</option>
-                  <option value="Passport">Passport</option>
-                  <option value="Driving License">Driving License</option>
-                </select>
-              </div>
+              <select
+                name="goverment_id"
+                value={formData.goverment_id}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Government ID</option>
+                <option value="Aadhaar">Aadhaar</option>
+                <option value="Voter ID">Voter ID</option>
+                <option value="PAN Card">PAN Card</option>
+                <option value="Passport">Passport</option>
+                <option value="Driving License">Driving License</option>
+              </select>
 
-              {/* RIGHT COLUMN */}
-              <div className="fields">
-                <input
-                  type="text"
-                  name="id_number"
-                  placeholder={`${formData.goverment_id || ""} Number`}
-                  value={formData.id_number}
-                  onChange={handleChange}
-                  required
-                />
+              <input
+                type="text"
+                name="id_number"
+                placeholder={`${formData.goverment_id || ""} Govt ID Number`}
+                value={formData.id_number}
+                onChange={handleChange}
+                required
+              />
 
-                <input
-                  type="text"
-                  name="gst_number"
-                  placeholder="GST Number"
-                  value={formData.gst_number}
-                  onChange={handleChange}
-                  required
-                />
+              <input
+                type="text"
+                name="gst_number"
+                placeholder="GST Number"
+                value={formData.gst_number}
+                onChange={handleChange}
+                required
+              />
 
+              {/* PASSWORD WITH TOGGLE */}
+              <div className="password-box">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Password"
                   value={formData.password}
@@ -171,19 +172,36 @@ function AdminRegister() {
                   required
                 />
 
+                <span
+                  className="toggle-eye"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+
+              {/* CONFIRM PASSWORD WITH TOGGLE */}
+              <div className="password-box">
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="Confirm Password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
                 />
+
+                <span
+                  className="toggle-eye"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
               </div>
             </div>
 
             <button type="submit" className="register-btn" disabled={loading}>
-              {loading ? 'Registering...' : 'Register'}
+              {loading ? "Registering..." : "Register"}
             </button>
           </form>
 

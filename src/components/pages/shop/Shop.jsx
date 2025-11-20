@@ -51,6 +51,7 @@ function Shop() {
       ? `${API_BASE_URL}/${p.image_path[0].replace(/^\/+/, "")}`
       : "/placeholder.png",
     description: p.description,
+    stock: p.quantity,
   }));
 
   const filteredProducts = transformedProducts.filter((p) => {
@@ -222,7 +223,6 @@ function Shop() {
           </div>
         )}
       </div>
-
     </div>
   );
 }
