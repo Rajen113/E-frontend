@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import { OrderService } from "../../../services/orderService";
 import "./OrderDetails.css";
 
-export default function OrderDetails() {
+export default function OrderDetailsSimple() {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);
@@ -16,176 +16,179 @@ export default function OrderDetails() {
   const fetchOrderDetails = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://192.168.29.249:8004/orders/${orderId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
-      setOrder(response.data);
+      const data = await OrderService.getOrderById(orderId);
+      setOrder(data);
     } catch (err) {
       console.error("Failed to fetch order:", err);
-      alert("Failed to load order details");
     } finally {
       setLoading(false);
     }
   };
 
+  const cancelOrder = async () => {
+    try {
+      await OrderService.cancelOrder(orderId);
+      fetchOrderDetails();
+    } catch (err) {
+      console.error("Failed to cancel order:", err);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   if (loading) {
-    return <div className="loading-page">Loading order details...</div>;
+    return (
+      <div className="simple-loading">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   if (!order) {
     return (
-      <div className="error-page">
+      <div className="simple-error">
         <h2>Order not found</h2>
-        <Link to="/orders" className="back-link">← Back to Orders</Link>
+        <button onClick={() => navigate("/orders")}>Back to Orders</button>
       </div>
     );
   }
 
   return (
-    <div className="order-details-page">
-      <div className="details-container">
+    <div className="simple-order-page">
+      <div className="simple-container">
         
         {/* Header */}
-        <div className="details-header">
-          <button onClick={() => navigate("/orders")} className="back-btn">
+        <header className="simple-header">
+          <button className="back-link" onClick={() => navigate("/orders")}>
             ← Back
           </button>
-          <div className="header-content">
+          <div className="header-info">
             <h1>Order #{order.id}</h1>
-            <span className={`status-pill ${order.status.toLowerCase()}`}>
-              {order.status}
-            </span>
+            <div className="header-meta">
+              <span className="order-date">{formatDate(order.created_at)}</span>
+              <span className={`simple-status ${order.status.toLowerCase()}`}>
+                {order.status}
+              </span>
+            </div>
           </div>
-        </div>
+        </header>
 
         {/* Main Content */}
-        <div className="details-grid">
+        <div className="simple-content">
           
-          {/* Left Column */}
-          <div className="left-column">
+          {/* Left Side */}
+          <div className="main-section">
             
             {/* Order Info */}
-            <div className="info-card">
-              <h2>Order Information</h2>
-              <div className="info-rows">
-                <div className="info-row">
-                  <span className="info-label">Order ID</span>
-                  <span className="info-value">#{order.id}</span>
+            <section className="simple-card">
+              <h2>Order Details</h2>
+              <div className="info-list">
+                <div className="info-item">
+                  <span>Order Date</span>
+                  <strong>{formatDate(order.created_at)}</strong>
                 </div>
-                <div className="info-row">
-                  <span className="info-label">Order Date</span>
-                  <span className="info-value">
-                    {new Date(order.created_at).toLocaleDateString('en-IN', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">Last Updated</span>
-                  <span className="info-value">
-                    {new Date(order.updated_at).toLocaleDateString('en-IN', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
+                <div className="info-item">
+                  <span>Last Updated</span>
+                  <strong>{formatDate(order.updated_at)}</strong>
                 </div>
                 {order.tracking_number && (
-                  <div className="info-row">
-                    <span className="info-label">Tracking Number</span>
-                    <span className="info-value highlight">{order.tracking_number}</span>
+                  <div className="info-item">
+                    <span>Tracking Number</span>
+                    <strong className="tracking">{order.tracking_number}</strong>
+                  </div>
+                )}
+                {order.shipping_method && (
+                  <div className="info-item">
+                    <span>Shipping Method</span>
+                    <strong>{order.shipping_method}</strong>
                   </div>
                 )}
               </div>
-            </div>
+            </section>
 
-            {/* Shipping Address */}
-            <div className="info-card">
-              <h2>Shipping Address</h2>
-              <div className="address-box">
-                <p className="address-name">{order.shipping_address.recipient_name}</p>
-                <p className="address-line">{order.shipping_address.street}</p>
-                <p className="address-line">
-                  {order.shipping_address.city}, {order.shipping_address.postal_code}
-                </p>
-                <p className="address-line">{order.shipping_address.country}</p>
-              </div>
-            </div>
+            {/* Addresses */}
+            <section className="simple-card">
+              <h2>Delivery Information</h2>
+              
+              <div className="address-group">
+                <div className="address-block">
+                  <h3>Shipping Address</h3>
+                  <p className="name">{order.shipping_address.recipient_name}</p>
+                  <p>{order.shipping_address.street}</p>
+                  <p>{order.shipping_address.city}, {order.shipping_address.postal_code}</p>
+                  <p>{order.shipping_address.country}</p>
+                </div>
 
-            {/* Billing Address */}
-            <div className="info-card">
-              <h2>Billing Address</h2>
-              <div className="address-box">
-                <p className="address-name">{order.billing_address.recipient_name}</p>
-                <p className="address-line">{order.billing_address.street}</p>
-                <p className="address-line">
-                  {order.billing_address.city}, {order.billing_address.postal_code}
-                </p>
-                <p className="address-line">{order.billing_address.country}</p>
+                <div className="divider"></div>
+
+                <div className="address-block">
+                  <h3>Billing Address</h3>
+                  <p className="name">{order.billing_address.recipient_name}</p>
+                  <p>{order.billing_address.street}</p>
+                  <p>{order.billing_address.city}, {order.billing_address.postal_code}</p>
+                  <p>{order.billing_address.country}</p>
+                </div>
               </div>
-            </div>
+            </section>
 
           </div>
 
-          {/* Right Column */}
-          <div className="right-column">
+          {/* Right Sidebar */}
+          <aside className="sidebar-section">
             
             {/* Payment Summary */}
-            <div className="summary-card">
-              <h2>Payment Summary</h2>
-              <div className="summary-rows">
-                <div className="summary-row">
+            <div className="simple-card summary-card">
+              <h2>Summary</h2>
+              
+              <div className="summary-list">
+                <div className="summary-item">
                   <span>Subtotal</span>
-                  <span>₹{order.total_amount}</span>
+                  <span>₹{order.total_amount.toFixed(2)}</span>
                 </div>
-                <div className="summary-row">
+                <div className="summary-item">
                   <span>Shipping</span>
-                  <span>FREE</span>
+                  <span className="free">Free</span>
                 </div>
-                <div className="summary-row total">
-                  <span>Total Amount</span>
-                  <span>₹{order.total_amount}</span>
+                <div className="summary-total">
+                  <span>Total</span>
+                  <strong>₹{order.total_amount.toFixed(2)}</strong>
                 </div>
               </div>
-              
-              {order.payment_details ? (
+
+              {order.payment_details && (
                 <div className="payment-info">
-                  <p className="payment-method">
-                    <strong>Payment Method:</strong> {order.payment_details.method}
-                  </p>
-                  <p className="payment-status">
-                    <strong>Payment Status:</strong> {order.payment_details.status}
-                  </p>
-                </div>
-              ) : (
-                <div className="payment-pending">
-                  <p>Payment details not available</p>
+                  <div className="payment-row">
+                    <span>Payment Method</span>
+                    <span>{order.payment_details.method}</span>
+                  </div>
+                  <div className="payment-row">
+                    <span>Status</span>
+                    <span className="payment-badge">{order.payment_details.status}</span>
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* User Info */}
-            <div className="user-card">
-              <h3>Customer</h3>
-              <p className="user-email">{order.user_id}</p>
+            {/* Customer */}
+            <div className="simple-card">
+              <h2>Customer</h2>
+              <p className="customer-id">{order.user_id}</p>
             </div>
 
-            {order.shipping_method && (
-              <div className="shipping-card">
-                <h3>Shipping Method</h3>
-                <p className="shipping-method">{order.shipping_method}</p>
-              </div>
+            {/* Actions */}
+            {["pending", "processing"].includes(order.status.toLowerCase()) && (
+              <button className="cancel-button" onClick={cancelOrder}>
+                Cancel Order
+              </button>
             )}
 
-          </div>
+          </aside>
 
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo, useCallback } from "react";
 import { CartContext } from "../../../context/CartContext";
 import { AuthContext } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -9,23 +9,33 @@ export default function Cart() {
   const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const tax = subtotal * 0.05; // 5% tax
-  const shipping = subtotal > 500 ? 0 : 50; // Free shipping over ₹500
-  const total = subtotal + tax + shipping;
 
-  const handleCheckout = () => {
+  /* ---------------- CALCULATIONS (memoized) ---------------- */
+
+  const subtotal = useMemo(() => {
+    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  }, [cart]);
+
+  const tax = useMemo(() => subtotal * 0.05, [subtotal]);
+  const shipping = useMemo(() => (subtotal > 500 ? 0 : 50), [subtotal]);
+  const total = useMemo(() => subtotal + tax + shipping, [subtotal, tax, shipping]);
+
+  /* ---------------- HANDLE CHECKOUT ---------------- */
+
+  const handleCheckout = useCallback(() => {
     if (!isLoggedIn) {
-      alert("Please login to proceed to checkout");
-      return navigate("/login");
+      navigate("/login");
+      return;
     }
     navigate("/checkout");
-  };
+  }, [isLoggedIn, navigate]);
+
+  /* ---------------- EMPTY CART UI ---------------- */
 
   if (cart.length === 0) {
     return (
       <div className="empty-cart">
-        <div className="empty-icon">🛒</div>
+        <div className="empty-icon"><i class="ri-shopping-cart-2-fill"></i></div>
         <h2>Your cart is empty</h2>
         <p>Looks like you haven't added anything to your cart yet</p>
         <button className="shop-now-btn" onClick={() => navigate("/shop")}>
@@ -34,6 +44,7 @@ export default function Cart() {
       </div>
     );
   }
+
 
   return (
     <div className="cart-page">
@@ -51,7 +62,7 @@ export default function Cart() {
           <div className="cart-items">
             {cart.map((item) => (
               <div className="cart-card" key={item.id}>
-                
+
                 <div className="cart-item-image">
                   <img src={item.img} alt={item.name} />
                 </div>
@@ -68,7 +79,9 @@ export default function Cart() {
                       >
                         −
                       </button>
+
                       <span>{item.qty}</span>
+
                       <button onClick={() => updateQty(item.id, item.qty + 1)}>
                         +
                       </button>
@@ -86,12 +99,13 @@ export default function Cart() {
                 <div className="cart-item-total">
                   <p className="total-price">₹{item.price * item.qty}</p>
                 </div>
+
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT - ORDER SUMMARY */}
+        {/* RIGHT - SUMMARY */}
         <div className="cart-summary">
           <h3>Order Summary</h3>
 
@@ -127,7 +141,10 @@ export default function Cart() {
             Proceed to Checkout
           </button>
 
-          <button className="continue-shopping-btn" onClick={() => navigate("/shop")}>
+          <button
+            className="continue-shopping-btn"
+            onClick={() => navigate("/shop")}
+          >
             Continue Shopping
           </button>
         </div>
@@ -136,4 +153,3 @@ export default function Cart() {
     </div>
   );
 }
-  

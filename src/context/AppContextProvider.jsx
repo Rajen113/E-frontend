@@ -6,22 +6,16 @@ import { AdminProvider } from "./AdminContext";
 
 export default function AppContextProvider({ children }) {
   return (
-    <>
-    <AuthProvider>
-       <AdminProvider> 
-      <ProductProvider>
-        <CartProvider>
-          <ToastProvider>
-
-            {children}
-          </ToastProvider>
-        </CartProvider>
-      </ProductProvider>
+    <ToastProvider>
+      <AuthProvider>
+        <AdminProvider>
+          <ProductProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </ProductProvider>
         </AdminProvider>
       </AuthProvider>
-
-   
-   
-    </>
+    </ToastProvider>
   );
 }

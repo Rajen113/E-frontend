@@ -276,23 +276,6 @@ export default function Profile() {
             </div>
 
             {/* Account Info */}
-            <div className="info-card">
-              <h3>Account Information</h3>
-              <div className="info-list">
-                <div className="info-row">
-                  <span className="info-label">Account Status</span>
-                  <span className="info-badge active">Active</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">User ID</span>
-                  <span className="info-value">{user?.id || "N/A"}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">Email Verified</span>
-                  <span className="info-badge verified">✓ Verified</span>
-                </div>
-              </div>
-            </div>
 
           </div>
         </div>
