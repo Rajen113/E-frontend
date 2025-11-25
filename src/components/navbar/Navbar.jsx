@@ -26,9 +26,17 @@ function Navbar() {
     navigate(`/shop?search=${search}`);
   };
 
-  useEffect(()=>{
-    handleSearch()
-  },[search])
+  // Auto-search on typing
+  useEffect(() => {
+  if (search.trim() !== "") {
+    const delay = setTimeout(() => {
+      handleSearch();
+    }, 500);
+
+    return () => clearTimeout(delay);
+  }
+}, [search]);
+
   return (
     <nav className="navbar">
 

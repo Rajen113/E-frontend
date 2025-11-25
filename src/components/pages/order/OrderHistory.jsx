@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { getMyOrdersAPI } from "../../../services/orderService";
+import { OrderService } from "../../../services/orderService";
 import { Link, useNavigate } from "react-router-dom";
 import "./OrderHistory.css";
 
@@ -11,16 +11,14 @@ export default function OrderHistory() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      loadOrders();
-    }
+    if (isLoggedIn) loadOrders();
   }, [isLoggedIn]);
 
   const loadOrders = async () => {
     setLoading(true);
     try {
-      const res = await getMyOrdersAPI();
-      setOrders(res.data || []);
+      const data = await OrderService.getUserOrders();
+      setOrders(data || []);
     } catch (err) {
       console.error("Order fetch failed:", err);
     } finally {
@@ -72,10 +70,10 @@ export default function OrderHistory() {
               </div>
 
               <div className="box-date">
-                {new Date(order.created_at).toLocaleDateString('en-IN', {
-                  day: '2-digit',
-                  month: 'short',
-                  year: 'numeric'
+                {new Date(order.created_at).toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
                 })}
               </div>
 
@@ -83,7 +81,10 @@ export default function OrderHistory() {
                 {order.items?.slice(0, 3).map((item, idx) => (
                   <div className="mini-item" key={idx}>
                     <img
-                      src={`${import.meta.env.VITE_PRODUCT_URL || 'http://192.168.29.249:8001'}/${item.image?.replace(/^\/+/, "")}`}
+                      src={`${
+                        import.meta.env.VITE_PRODUCT_URL ||
+                        "http://192.168.29.249:8001"
+                      }/${item.image?.replace(/^\/+/, "")}`}
                       alt={item.name}
                     />
                     <div className="mini-details">
@@ -92,8 +93,11 @@ export default function OrderHistory() {
                     </div>
                   </div>
                 ))}
+
                 {order.items?.length > 3 && (
-                  <p className="more-items">+{order.items.length - 3} more items</p>
+                  <p className="more-items">
+                    +{order.items.length - 3} more items
+                  </p>
                 )}
               </div>
 
