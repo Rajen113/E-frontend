@@ -40,7 +40,7 @@ function Home() {
     const cats = [...new Set(transformedProducts.map((p) => p.category))];
     setCategories(cats);
     setBestSelling(transformedProducts.slice(0, 5));
-    
+
     const shuffled = [...transformedProducts].sort(() => 0.5 - Math.random());
     setFeaturedProducts(shuffled.slice(0, 4));
   }, [products, loading]);
@@ -51,15 +51,15 @@ function Home() {
   };
 
   // Handle Add to Cart
-  const handleAdd = (product) => {  
-  if (!isLoggedIn) {
-    localStorage.setItem("pendingProduct", product.id);
-    navigate("/login");
-    return;
-  }
-  addToCart(product.id);
-  showToast("🛒 Added to cart!");
-};
+  const handleAdd = (product) => {
+    if (!isLoggedIn) {
+      localStorage.setItem("pendingProduct", product.id);
+      navigate("/login");
+      return;
+    }
+    addToCart(product.id);
+    showToast("🛒 Added to cart!");
+  };
 
   // Handle Quick View
   const handleQuickView = (product, e) => {
@@ -129,12 +129,13 @@ function Home() {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="category-icon">
-                <span>{cat.charAt(0).toUpperCase()}</span>
+                <span>{(cat || "").charAt(0).toUpperCase()}</span>
               </div>
-              <h3 className="category-name">{cat}</h3>
+              <h3 className="category-name">{cat || "Unknown"}</h3>
               <span className="category-arrow">→</span>
             </Link>
           ))}
+
         </div>
       </section>
 
@@ -164,7 +165,7 @@ function Home() {
                 <Link to={`/product/${item.id}`}>
                   <img src={item.img} alt={item.title} className="product-image" />
                 </Link>
-                
+
                 {/* Quick View Button Only */}
                 <div className="product-actions">
                   <button
@@ -172,7 +173,7 @@ function Home() {
                     onClick={(e) => handleQuickView(item, e)}
                     title="Quick View"
                   >
-                    <i class="ri-eye-fill"></i>
+                    <i className="ri-eye-fill"></i>
                   </button>
                 </div>
 
@@ -186,7 +187,7 @@ function Home() {
                   <h3 className="product-title">{item.title}</h3>
                 </Link>
                 <p className="product-price">₹{item.price.toLocaleString('en-IN')}</p>
-                
+
                 <button
                   className={`add-cart-btn ${isInCart(item.id) ? 'in-cart-btn' : ''}`}
                   onClick={() => handleAdd(item)}
@@ -199,7 +200,7 @@ function Home() {
                   ) : (
                     <>
                       <span>Add to Cart</span>
-                      <span className="cart-icon"><i class="ri-shopping-cart-2-fill"></i></span>
+                      <span className="cart-icon"><i className="ri-shopping-cart-2-fill"></i></span>
                     </>
                   )}
                 </button>
@@ -288,21 +289,21 @@ function Home() {
         <div className="quick-view-overlay" onClick={closeQuickView}>
           <div className="quick-view-modal" onClick={(e) => e.stopPropagation()}>
             <button className="close-modal" onClick={closeQuickView}>✕</button>
-            
+
             <div className="quick-view-content">
               <div className="quick-view-image">
                 <img src={quickViewProduct.img} alt={quickViewProduct.title} />
               </div>
-              
+
               <div className="quick-view-details">
                 <span className="quick-view-category">{quickViewProduct.category}</span>
                 <h2>{quickViewProduct.title}</h2>
                 <p className="quick-view-price">₹{quickViewProduct.price.toLocaleString('en-IN')}</p>
-                
+
                 <p className="quick-view-description">
                   {quickViewProduct.description || "Premium quality product with excellent features."}
                 </p>
-                
+
                 <div className="quick-view-stock">
                   {quickViewProduct.stock > 0 ? (
                     <span className="in-stock">✓ In Stock ({quickViewProduct.stock} available)</span>
@@ -310,7 +311,7 @@ function Home() {
                     <span className="out-of-stock">✗ Out of Stock</span>
                   )}
                 </div>
-                
+
                 <div className="quick-view-actions">
                   <button
                     className="quick-add-cart"
@@ -322,7 +323,7 @@ function Home() {
                   >
                     {isInCart(quickViewProduct.id) ? '✓ In Cart' : '🛒 Add to Cart'}
                   </button>
-                  
+
                   <Link
                     to={`/product/${quickViewProduct.id}`}
                     className="view-full-details"

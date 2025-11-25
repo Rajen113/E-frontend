@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import "./CreateProduct.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import { getCategoriesService } from "../../../../services/categories.service";
+import { createProductService } from "../../../../services/product.service";
+import { AdminContext } from "../../../../context/AdminContext";
+
+
 function CreateProduct() {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
+  const { isAdminLoggedIn } = useContext(AdminContext);
+
+  const [message, setMessage] = useState(null);     // SUCCESS / ERROR message
+  const [msgType, setMsgType] = useState("success"); // success / error
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,74 +26,101 @@ function CreateProduct() {
     category_id: "",
   });
 
-  // Load categories (API Call)
+  // Load categories
   useEffect(() => {
-    axios
-      .get("http://192.168.29.249:8001/categories/api/get_categories")
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.log("Category load error:", err));
+    const loadCategories = async () => {
+      try {
+        const data = await getCategoriesService();
+        setCategories(data || []);
+      } catch (err) {
+        showMessage("Failed to load categories!", "error");
+      }
+    };
+
+    loadCategories();
   }, []);
 
-  // Handle input changes
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // Show message on screen (no alert)
+  const showMessage = (text, type = "success") => {
+    setMessage(text);
+    setMsgType(type);
+
+    setTimeout(() => {
+      setMessage(null);
+    }, 3000);
   };
 
-  // Image Upload Handler
+  // Input Change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Image Upload Preview
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-
     setImages(files);
 
     const previews = files.map((file) => URL.createObjectURL(file));
     setImagePreview(previews);
   };
+  useEffect(() => {
+    if (!isAdminLoggedIn) {
+      navigate("/admin/login");
+    }
+  }, [isAdminLoggedIn]);
+  // Cleanup image preview
+  useEffect(() => {
+    return () => {
+      imagePreview.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreview]);
 
-  // Submit Form
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = new FormData();
+    Object.entries(formData).forEach(([key, value]) =>
+      form.append(key, value)
+    );
 
-    // Append text fields
-    Object.keys(formData).forEach((key) => {
-      form.append(key, formData[key]);
-    });
-
-
-    images.forEach((img) => {
-      form.append("images", img);
-    });
+    images.forEach((img) => form.append("images", img));
 
     try {
-      const response = await axios.post(
-        "http://192.168.29.249:8001/api/create_product/",
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await createProductService(form);
+      showMessage("Product created successfully!", "success");
 
-      console.log("Response:", response.data);
-      navigate("/admin/productList");
-    } catch (error) {
-      console.log("Upload error:", error);
-      alert("Failed to create product!");
+      setTimeout(() => {
+        navigate("/admin/productList");
+      }, 1000);
+    } catch (err) {
+      showMessage("Failed to create product!", "error");
     }
   };
 
   return (
     <div className="add-product-page">
       <div className="add-product-container">
+
+        {/* ✔ Message Box */}
+        {message && (
+          <div className={`msg-box ${msgType}`}>
+            {message}
+          </div>
+        )}
+
         <div className="page-header">
-          <h2>
-            Add New Product
-          </h2>
+          <h2>Add New Product</h2>
         </div>
+
         <form className="product-form" onSubmit={handleSubmit}>
 
+          {/* NAME */}
           <div className="form-group">
             <label>Product Name</label>
             <input
@@ -97,7 +133,7 @@ function CreateProduct() {
             />
           </div>
 
-
+          {/* CATEGORY */}
           <div className="form-group">
             <label>Select Category</label>
             <select
@@ -107,15 +143,20 @@ function CreateProduct() {
               required
             >
               <option value="">Select Category</option>
-              {categories.map((c) => (
-                <option value={c.id} key={c.id}>
-                  {c.category}
-                </option>
-              ))}
+
+              {categories.length > 0 ? (
+                categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.category}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No Categories Found</option>
+              )}
             </select>
           </div>
 
-
+          {/* QUANTITY */}
           <div className="form-group">
             <label>Quantity</label>
             <input
@@ -128,7 +169,7 @@ function CreateProduct() {
             />
           </div>
 
-
+          {/* PRICE */}
           <div className="form-group">
             <label>Price</label>
             <input
@@ -141,46 +182,34 @@ function CreateProduct() {
             />
           </div>
 
-
+          {/* DESCRIPTION */}
           <div className="form-group">
             <label>Description</label>
             <textarea
               name="description"
               value={formData.description}
-              onChange={handleChange}
               placeholder="Enter Description"
+              onChange={handleChange}
               required
-            ></textarea>
-          </div>
-
-
-          <div className="form-group">
-            <label>Upload Images</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleImageUpload}
             />
           </div>
 
-          {/* Preview */}
+          {/* IMAGE UPLOAD */}
+          <div className="form-group">
+            <label>Upload Images</label>
+            <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
+          </div>
+
+          {/* PREVIEW */}
           {imagePreview.length > 0 && (
             <div className="preview-container">
               {imagePreview.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  className="product-preview"
-                  alt="Preview"
-                />
+                <img key={idx} src={img} className="product-preview" alt="Preview" />
               ))}
             </div>
           )}
 
-          <button type="submit" className="btn-submit">
-            Add Product
-          </button>
+          <button type="submit" className="btn-submit">Add Product</button>
         </form>
       </div>
     </div>

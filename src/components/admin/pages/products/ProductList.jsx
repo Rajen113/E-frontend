@@ -1,51 +1,58 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import "./ProductList.css";
+
+import {
+  getProductsByAdminService,
+  deleteProductService,
+} from "../../../../services/product.service";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
 
-  // Pagination states
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Number of items per page
+  const itemsPerPage = 6;
 
+  const API_BASE_URL =
+    import.meta.env.VITE_PRODUCT_URL || "http://192.168.0.122:8001";
+
+  // Load admin-specific products
   const loadProducts = async () => {
-    const res = await axios.get("http://192.168.29.249:8001/api/get_products");
-    setProducts(res.data);
+    try {
+      const data = await getProductsByAdminService();
+      setProducts(data || []);
+    } catch (err) {
+      console.log("Failed to load products:", err);
+    }
   };
 
   useEffect(() => {
     loadProducts();
   }, []);
 
-  const deleteProduct = async (id) => {
-    if (!window.confirm("Delete this product?")) return;
+  // Delete Product
+  const handleDelete = async (id) => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
-    await axios.delete(
-      `http://192.168.29.249:8001/api/delete_product/${id}`
-    );
-    loadProducts();
+    try {
+      await deleteProductService(id);
+      loadProducts();
+    } catch (err) {
+      console.log("Delete Error:", err);
+    }
   };
 
-  const API_BASE_URL = "http://192.168.29.249:8001";
-
-  // Pagination Calculation
+  // Pagination Calculations
   const totalPages = Math.ceil(products.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProducts = products.slice(startIndex, startIndex + itemsPerPage);
-
-  const changePage = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
 
   return (
     <div className="product-list-container">
 
       <div className="list-header">
-        <h2> All Products</h2>
+        <h2>Your Products</h2>
 
         <Link to="/admin/addProduct" className="add-btn">+ Add New</Link>
       </div>
@@ -71,13 +78,13 @@ function ProductList() {
               <td>
                 <img
                   src={`${API_BASE_URL}/${p.image_path[0]}`}
+                  alt={p.name}
                   className="product-img"
-                  alt="product"
                 />
               </td>
 
               <td>{p.name}</td>
-              <td>{p.category.category}</td>
+              <td>{p.category?.category}</td>
               <td>{p.quantity}</td>
               <td>₹{p.price}</td>
 
@@ -88,7 +95,7 @@ function ProductList() {
 
                 <button
                   className="delete-btn"
-                  onClick={() => deleteProduct(p.id)}
+                  onClick={() => handleDelete(p.id)}
                 >
                   Delete
                 </button>
@@ -98,30 +105,32 @@ function ProductList() {
         </tbody>
       </table>
 
-      {/* PAGINATION SECTION */}
+      {/* PAGINATION */}
       <div className="pagination">
         <button
           className="page-btn"
           disabled={currentPage === 1}
-          onClick={() => changePage(currentPage - 1)}
+          onClick={() => setCurrentPage(currentPage - 1)}
         >
           ❮ Prev
         </button>
 
-        {[...Array(totalPages)].map((_, i) => (
+        {[...Array(totalPages)].map((_, index) => (
           <button
-            key={i}
-            onClick={() => changePage(i + 1)}
-            className={`page-number ${currentPage === i + 1 ? "active" : ""}`}
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            className={`page-number ${
+              currentPage === index + 1 ? "active" : ""
+            }`}
           >
-            {i + 1}
+            {index + 1}
           </button>
         ))}
 
         <button
           className="page-btn"
           disabled={currentPage === totalPages}
-          onClick={() => changePage(currentPage + 1)}
+          onClick={() => setCurrentPage(currentPage + 1)}
         >
           Next ❯
         </button>
