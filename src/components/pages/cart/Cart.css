@@ -117,6 +117,7 @@
   padding: 15px;
   border: 2px solid #f0f0f0;
   border-radius: 10px;
+  align-items: center;     /* 🟢 FIXED alignment */
   transition: all 0.3s ease;
 }
 
@@ -169,27 +170,35 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-top: auto;
 }
 
+/* ---------- FIXED QUANTITY CONTROLS (NO SHIFT) ---------- */
 .quantity-controls {
+  height: 40px;                 /* 🟢 FIXED HEIGHT */
+  min-width: 120px;             /* 🟢 Prevent shrinking */
+  padding: 4px 8px;
   display: flex;
-  align-items: center;
+  align-items: center;          /* Center vertically */
+  justify-content: center;      /* Center horizontally */
+  gap: 8px;
+  background: #f8f9fa;
+  border-radius: 8px;
   border: 2px solid #e5e5e5;
-  border-radius: 6px;
-  overflow: hidden;
 }
 
 .quantity-controls button {
   width: 32px;
-  height: 32px;
-  background: #f8f9fa;
+  height: 32px;                 /* 🟢 FIX SAME SIZE */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   font-size: 18px;
-  font-weight: 600;
-  color: #667eea;
+  font-weight: 700;
+  background: #eef1f5;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: 0.2s ease;
+  color: #667eea;
 }
 
 .quantity-controls button:hover:not(:disabled) {
@@ -203,13 +212,13 @@
 }
 
 .quantity-controls span {
-  min-width: 40px;
+  width: 30px;                  /* 🟢 FIX WIDTH = no jumping */
   text-align: center;
   font-size: 14px;
   font-weight: 600;
-  color: #333;
 }
 
+/* ---------- REMOVE BUTTON ---------- */
 .remove-btn {
   padding: 6px 14px;
   background: white;
@@ -424,7 +433,7 @@
   }
 
   .quantity-controls span {
-    min-width: 35px;
+    width: 30px;
     font-size: 13px;
   }
 }

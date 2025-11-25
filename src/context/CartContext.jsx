@@ -1,4 +1,12 @@
-import { createContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
+
 import {
   getCartAPI,
   addToCartAPI,
@@ -6,126 +14,163 @@ import {
   updateCartItemAPI,
   removeCartItemAPI,
 } from "../services/cartService";
-import axios from "axios";
+
+import { ToastContext } from "./ToastContext";
+import { AuthContext } from "./AuthContext";
+import { getProductByIdAPI } from "../api/product/product.api";
+import { productAPI } from "../api/instances";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { isLoggedIn } = useContext(AuthContext);
+  const { showToast } = useContext(ToastContext);
+
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const productCache = {};
- 
-  const parseImagePath = (imagePath) => {
-    if (!imagePath) return [];
+  const productCache = useRef({});
 
-    try {
-      // Remove extra quotes from string
-      let cleaned = imagePath.replace(/^"+|"+$/g, "");
+  const BASE_IMAGE_URL = productAPI.defaults.baseURL;
 
-      // Fix double-double quotes
-      cleaned = cleaned.replace(/""/g, '"');
-
-      const parsed = JSON.parse(cleaned);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (err) {
-      console.error("Image path parse error:", err, imagePath);
-      return [];
-    }
-  };
-
-  const fetchProductDetails = async (product_id) => {
-    if (productCache[product_id]) {
-      return productCache[product_id];
+  const fetchProductDetails = useCallback(async (product_id) => {
+    if (productCache.current[product_id]) {
+      return productCache.current[product_id];
     }
 
     try {
-      const res = await axios.get(
-        `http://192.168.29.249:8001/api/product/get/${product_id}`
-      );
+      const res = await getProductByIdAPI(product_id);
+      const product = res.data;
 
-      productCache[product_id] = res.data;
-      return res.data;
+      productCache.current[product_id] = product;
+      return product;
     } catch (err) {
-      // console.error("Product fetch failed:", err);
+      console.error("Product fetch failed:", err);
       return null;
     }
-  };
+  }, []);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     try {
       const res = await getCartAPI();
-      const items = res.data.items || [];
+      const items = res.items || [];
 
-      const completeCart = await Promise.all(
-        items.map(async (ci) => {
-          const product = await fetchProductDetails(ci.product_id);
+      const merged = await Promise.all(
+        items.map(async (item) => {
+          const product = await fetchProductDetails(item.product_id);
 
-          const images = parseImagePath(product?.image_path);
+          let imageList = [];
+          try {
+            imageList = JSON.parse(product?.image_path || "[]");
+          } catch {
+            imageList = [];
+          }
+
+          const img = imageList.length
+            ? `${BASE_IMAGE_URL}/${imageList[0].replace(/^\/+/, "")}`
+            : "/placeholder.png";
 
           return {
-            id: ci.product_id,
-            qty: ci.quantity,
-            name: product?.name || "Unknown Product",
-            price: product?.price || 0,
-            img:
-              images.length > 0
-                ? `http://192.168.29.249:8001/${images[0].replace(/^\/+/, "")}`
-                : "https://via.placeholder.com/300x300?text=No+Image",
+            id: item.product_id,
+            qty: item.quantity,
+            name: product?.name || "Unknown",
+            price: Number(product?.price || 0),
+            stock: Number(product?.quantity || 0),
+            img,
           };
         })
       );
 
-      setCart(completeCart);
-    } catch (error) {
-      console.error("Error loading cart:", error);
+      merged.sort((a, b) => a.id - b.id);
+      setCart(merged);
+
+    } catch (err) {
+      console.error("Cart load error:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchProductDetails, BASE_IMAGE_URL]);
 
   useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const addToCart = async (product_id) => {
-    try {
-      await addToCartAPI(product_id, 1);
+    if (isLoggedIn) {
       fetchCart();
-    } catch (e) {
-      console.error("Add to cart error:", e);
+    } else {
+      setCart([]);
+      setLoading(false);
     }
-  };
+  }, [isLoggedIn, fetchCart]);
 
-  const updateQty = async (product_id, qty) => {
-    try {
-      await updateCartItemAPI(product_id, qty);
-      fetchCart();
-    } catch (e) {
-      console.error("Update qty error:", e);
-    }
-  };
+  const addToCart = useCallback(
+    async (product_id, qty = 1) => {
+      const existing = cart.find((i) => i.id === product_id);
 
-  const removeFromCart = async (product_id) => {
-    try {
-      const res = await removeCartItemAPI(product_id);
+      if (existing) {
+        const newQty = existing.qty + qty;
 
-      if (res.status === 200 || res.status === 204) {
+        if (newQty > existing.stock) {
+          showToast(`Only ${existing.stock} items available`);
+          return;
+        }
+
+        await updateCartItemAPI(product_id, newQty);
+        showToast("Cart updated!");
         fetchCart();
+        return;
       }
-    } catch (e) {
-      console.error("Remove item error:", e);
-    }
-  };
 
-  const clearCart = async () => {
+      try {
+        await addToCartAPI(product_id, qty);
+        showToast("Added to cart!");
+        fetchCart();
+      } catch (e) {
+        console.error("addToCart error:", e);
+      }
+    },
+    [cart, fetchCart, showToast]
+  );
+
+  const updateQty = useCallback(
+    async (product_id, qty) => {
+      const item = cart.find((i) => i.id === product_id);
+      if (!item) return;
+
+      if (qty > item.stock) {
+        showToast(`Only ${item.stock} available`);
+        return;
+      }
+
+      if (qty < 1) return;
+
+      try {
+        await updateCartItemAPI(product_id, qty);
+        fetchCart();
+      } catch (e) {
+        console.error("Update qty error:", e);
+      }
+    },
+    [cart, fetchCart, showToast]
+  );
+
+  const removeFromCart = useCallback(
+    async (product_id) => {
+      try {
+        await removeCartItemAPI(product_id);
+        fetchCart();
+      } catch (e) {
+        console.error("Remove error:", e);
+      }
+    },
+    [fetchCart]
+  );
+
+  const clearCart = useCallback(async () => {
     try {
       await deleteCartAPI();
       setCart([]);
     } catch (e) {
       console.error("Clear cart error:", e);
     }
-  };
+  }, []);
 
   return (
     <CartContext.Provider

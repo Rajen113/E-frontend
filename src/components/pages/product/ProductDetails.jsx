@@ -18,7 +18,8 @@ export default function ProductDetails() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
-  const API_BASE_URL = import.meta.env.VITE_PRODUCT_URL || "http://192.168.29.249:8001";
+  const API_BASE_URL =
+    import.meta.env.VITE_PRODUCT_URL || "http://192.168.29.249:8001";
 
   if (loading) return <h2 className="loading">Loading...</h2>;
 
@@ -30,32 +31,32 @@ export default function ProductDetails() {
     (img) => `${API_BASE_URL}/${img.replace(/^\/+/, "")}`
   );
 
+  // Add to cart → cart redirect
   const handleAddToCart = () => {
     if (!isLoggedIn) {
       showToast("Please login to add items to cart");
+      localStorage.setItem("pendingProduct", product.id);
       return navigate("/login");
     }
-    
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product.id);
-    }
-    
+
+    addToCart(product.id, quantity);
     showToast(`🛒 ${quantity} item(s) added to cart!`);
+
+    navigate("/cart");
   };
 
+  //  Buy Now → add + redirect
   const handleBuyNow = () => {
     if (!isLoggedIn) {
       showToast("Please login to continue");
       return navigate("/login");
     }
-    
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product.id);
-    }
-    
+
+    addToCart(product.id, quantity);
     navigate("/cart");
   };
 
+  // Quantity increment/decrement
   const incrementQty = () => {
     if (quantity < product.quantity) {
       setQuantity(quantity + 1);
@@ -99,7 +100,7 @@ export default function ProductDetails() {
         <div className="details-info">
           <div className="product-header">
             <h1>{product.name}</h1>
-            
+
             <div className="category-badge">
               {product.category?.category || "Uncategorized"}
             </div>
@@ -114,7 +115,9 @@ export default function ProductDetails() {
 
           <div className="stock-info">
             {product.quantity > 0 ? (
-              <span className="in-stock">✓ In Stock ({product.quantity} available)</span>
+              <span className="in-stock">
+                ✓ In Stock ({product.quantity} available)
+              </span>
             ) : (
               <span className="out-of-stock">✗ Out of Stock</span>
             )}
@@ -126,23 +129,30 @@ export default function ProductDetails() {
           <div className="quantity-section">
             <label>Quantity:</label>
             <div className="quantity-controls">
-              <button onClick={decrementQty} disabled={quantity <= 1}>−</button>
+              <button onClick={decrementQty} disabled={quantity <= 1}>
+                −
+              </button>
               <input type="number" value={quantity} readOnly />
-              <button onClick={incrementQty} disabled={quantity >= product.quantity}>+</button>
+              <button
+                onClick={incrementQty}
+                disabled={quantity >= product.quantity}
+              >
+                +
+              </button>
             </div>
           </div>
 
           {/* ACTION BUTTONS */}
           <div className="action-buttons">
-            <button 
-              className="add-to-cart-btn" 
+            <button
+              className="add-to-cart-btn"
               onClick={handleAddToCart}
               disabled={product.quantity === 0}
             >
               🛒 Add to Cart
             </button>
-            <button 
-              className="buy-now-btn" 
+            <button
+              className="buy-now-btn"
               onClick={handleBuyNow}
               disabled={product.quantity === 0}
             >
@@ -155,16 +165,17 @@ export default function ProductDetails() {
             <div className="product-specs">
               <h3>Specifications</h3>
               <ul>
-                {Object.entries(product.specifications).map(([key, value]) => (
-                  <li key={key}>
-                    <strong>{key}:</strong> {value}
-                  </li>
-                ))}
+                {Object.entries(product.specifications).map(
+                  ([key, value]) => (
+                    <li key={key}>
+                      <strong>{key}:</strong> {value}
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

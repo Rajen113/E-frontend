@@ -8,23 +8,28 @@ export const loginService = async ({ username, password }) => {
     data.append("password", password);
 
     const res = await loginAPI(data);
-    console.log(res);
 
     const token = res.data?.access_token;
-
-    if (token) {
-      localStorage.setItem("token", token);
+    
+    if (!token) {
+      return {
+        success: false,
+        message: "Invalid username or password!",
+      };
     }
+
+    localStorage.setItem("token", token);
 
     return { success: true, token, data: res.data };
 
   } catch (err) {
     return {
       success: false,
-      message: err.response?.data?.message || "Invalid credentials!",
+      message: err.response?.data?.message || "Invalid username or password!",
     };
   }
 };
+
 
 
 export const registerService = async (userData) => {

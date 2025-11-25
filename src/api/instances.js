@@ -1,23 +1,23 @@
 import axios from "axios";
 
 export const authAPI = axios.create({
-  baseURL: import.meta.env.VITE_AUTH_URL || "http://192.168.29.249:8000",
+  baseURL: import.meta.env.VITE_AUTH_URL || "http://192.168.0.122:8000/",
 });
 
 export const productAPI = axios.create({
-  baseURL: import.meta.env.VITE_PRODUCT_URL || "http://192.168.29.249:8001",
+  baseURL: import.meta.env.VITE_PRODUCT_URL || "http://192.168.0.122:8001",
 });
 
 export const cartAPI = axios.create({
-  baseURL: import.meta.env.VITE_CART_URL || "http://192.168.29.249:8003",
+  baseURL: import.meta.env.VITE_CART_URL || "http://192.168.0.122:8003",
 });
 
 export const orderAPI = axios.create({
-  baseURL: import.meta.env.VITE_ORDER_URL || "http://192.168.29.249:8004",
+  baseURL: import.meta.env.VITE_ORDER_URL || "http://192.168.0.122:8003~",
 });
 
 export const paymentAPI = axios.create({
-  baseURL: import.meta.env.VITE_PAYMENT_URL || "http://192.168.29.249:8000",
+  baseURL: import.meta.env.VITE_PAYMENT_URL || "http://192.168.0.122:8004",
 });
 
 const services = [authAPI, productAPI, cartAPI, orderAPI, paymentAPI];

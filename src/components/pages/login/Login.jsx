@@ -1,6 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
+import { CartContext } from "../../../context/CartContext";
 import { loginService } from "../../../services/auth.service";
 import "./Login.css";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -8,6 +9,7 @@ import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 function Login() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const { addToCart } = useContext(CartContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -20,9 +22,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
-    setSuccess("");
   };
 
   const handleSubmit = async (e) => {
@@ -30,34 +31,56 @@ function Login() {
     setLoading(true);
 
     const response = await loginService(formData);
+
     setLoading(false);
 
-    if (!response?.success) {
-      setError(response?.message || "Login failed. Try again.");
+    if (!response.success) {
+      setError(response.message || "Invalid login!");
       return;
     }
 
+    // Login context update
     login(response.token);
+
     setSuccess("Login successful! Redirecting...");
-    setTimeout(() => navigate("/"), 1200);
+
+    // Pending "Add to Cart" item
+    const pendingProduct = localStorage.getItem("pendingProduct");
+    if (pendingProduct) {
+      addToCart(pendingProduct);
+      localStorage.removeItem("pendingProduct");
+
+      setTimeout(() => navigate(-1), 800);
+      return;
+    }
+
+    // Normal redirect
+    setTimeout(() => navigate("/"), 800);
   };
+
+  // Auto-add pending product on refresh
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const pending = localStorage.getItem("pendingProduct");
+    if (pending) {
+      addToCart(pending);
+      localStorage.removeItem("pendingProduct");
+    }
+  }, []);
 
   return (
     <div className="login-page">
-
-      {/* LEFT IMAGE */}
       <div className="login-left">
-        <img
-          src="/login-illustration.webp"
-          alt="Login Illustration"
-        />
+        <img src="/login-illustration.webp" alt="Login Illustration" />
       </div>
 
-      {/* RIGHT FORM */}
       <div className="login-right">
         <div className="login-box">
-          <h2><FaUser /> Login Account</h2>
-          <p className="subtitle">Welcome back! Please enter your details.</p>
+          <h2>
+            <FaUser /> Login Account
+          </h2>
 
           <form onSubmit={handleSubmit}>
             {error && <p className="error-text">{error}</p>}
@@ -87,7 +110,7 @@ function Login() {
               <button
                 type="button"
                 className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowPassword((prev) => !prev)}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
@@ -105,7 +128,6 @@ function Login() {
           </form>
         </div>
       </div>
-
     </div>
   );
 }

@@ -28,10 +28,12 @@ import OrderSuccess from './components/pages/order/OrderSuccess'
 import OrderHistory from './components/pages/order/OrderHistory'
 import OrderDetails from './components/pages/order/OrderDetails'
 import VendorDashboard from './components/admin/pages/dashboard/VendorDashboard'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop/>
       <Routes>
         {/* All routes wrapped inside Layout */}
         <Route element={<Layout />}>
