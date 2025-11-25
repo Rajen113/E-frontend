@@ -101,7 +101,7 @@ function AdminRegister() {
 
             <div className="field-box">
 
-              {/* INPUT GROUPS */}
+            
               <input
                 type="text"
                 name="name"
@@ -161,7 +161,7 @@ function AdminRegister() {
                 required
               />
 
-              {/* PASSWORD WITH TOGGLE */}
+           
               <div className="password-box">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -180,7 +180,7 @@ function AdminRegister() {
                 </span>
               </div>
 
-              {/* CONFIRM PASSWORD WITH TOGGLE */}
+           
               <div className="password-box">
                 <input
                   type={showConfirmPassword ? "text" : "password"}

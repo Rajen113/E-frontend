@@ -9,7 +9,7 @@ function Header() {
   const { isAdminLoggedIn, logout } = useContext(AdminContext);
   const navigate = useNavigate();
 
-  // toggle for login/register buttons
+ 
   const [showRegister, setShowRegister] = useState(false);
 
   const handleLogout = () => {
@@ -19,7 +19,7 @@ function Header() {
 
   return (
     <div className="admin-header">
-      {/* Logo */}
+     
       <div className="navbar-logo">
         <div className="logo-text">
           <span className="brand-main">Shop</span>
@@ -32,8 +32,8 @@ function Header() {
 
         {isAdminLoggedIn ? (
           <>
-            <FaBell className="icon bounce" />
-            <MdEmail className="icon bounce" />
+            {/* <FaBell className="icon bounce" />
+            <MdEmail className="icon bounce" /> */}
 
             <Link to="/admin/profile" className="icon-link">
               <FaUser className="icon bounce" />
