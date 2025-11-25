@@ -7,20 +7,25 @@ export const authAPI = axios.create({
 export const productAPI = axios.create({
   baseURL: import.meta.env.VITE_PRODUCT_URL || "http://192.168.0.122:8001",
 });
+export const categoryAPI = axios.create({
+  baseURL: "http://192.168.0.122:8001/categories/api",
+});
+
 
 export const cartAPI = axios.create({
   baseURL: import.meta.env.VITE_CART_URL || "http://192.168.0.122:8003",
 });
 
 export const orderAPI = axios.create({
-  baseURL: import.meta.env.VITE_ORDER_URL || "http://192.168.0.122:8003~",
+  baseURL: import.meta.env.VITE_ORDER_URL || "http://192.168.0.122:8003",
 });
 
 export const paymentAPI = axios.create({
   baseURL: import.meta.env.VITE_PAYMENT_URL || "http://192.168.0.122:8004",
 });
 
-const services = [authAPI, productAPI, cartAPI, orderAPI, paymentAPI];
+const services = [authAPI, productAPI, cartAPI, orderAPI, paymentAPI, categoryAPI];
+
 
 services.forEach((api) => {
   api.interceptors.request.use(

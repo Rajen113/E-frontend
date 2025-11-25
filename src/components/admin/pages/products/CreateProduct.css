@@ -165,3 +165,28 @@
     font-size: 22px;
   }
 }
+.msg-box {
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-size: 15px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.msg-box.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.msg-box.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

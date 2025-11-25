@@ -29,11 +29,12 @@ import OrderHistory from './components/pages/order/OrderHistory'
 import OrderDetails from './components/pages/order/OrderDetails'
 import VendorDashboard from './components/admin/pages/dashboard/VendorDashboard'
 import ScrollToTop from './components/ScrollToTop'
+import ProtectedAdminRoute from './components/ProtectedAdminRoute'
 
 function App() {
   return (
     <BrowserRouter>
-    <ScrollToTop/>
+      <ScrollToTop />
       <Routes>
         {/* All routes wrapped inside Layout */}
         <Route element={<Layout />}>
@@ -57,7 +58,24 @@ function App() {
           <Route path="/admin/dashboard" element={<Admin />} />
           <Route path="/admin/venderDashboard" element={<VendorDashboard />} />
           <Route path="/admin/addProduct" element={<CreateProduct />} />
-          <Route path="/admin/productList" element={<ProductList />} />
+          <Route path="/admin/productList" element={<ProductList />} /><Route
+            path="/admin/createProduct"
+            element={
+              <ProtectedAdminRoute>
+                <CreateProduct />
+              </ProtectedAdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/productList"
+            element={
+              <ProtectedAdminRoute>
+                <ProductList />
+              </ProtectedAdminRoute>
+            }
+          />
+
           <Route path="/admin/categoryList" element={<CategoryList />} />
           <Route path="/admin/createcategory" element={<CreateCategory />} />
           <Route path="/admin/orderList" element={<OrderList />} />
