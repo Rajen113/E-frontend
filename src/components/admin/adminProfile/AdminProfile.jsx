@@ -132,7 +132,7 @@ export default function AdminProfile() {
               </>
             ) : (
               <button className="btn-edit" type="button" onClick={() => setEditMode(true)}>
-                ✏️ Edit Profile
+                Edit Profile
               </button>
             )}
           </div>

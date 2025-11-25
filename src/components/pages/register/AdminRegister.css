@@ -1,19 +1,19 @@
-/* WRAPPER */
+
 .register-wrapper {
   display: flex;
-  flex-direction: column;        /* FIX TOP MARGIN */
-  justify-content: center;
+  /* flex-direction: row;        */
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 80%;
   min-height: 100vh;
-  padding: 20px 10px;            /* Reduce padding */
+  padding: 20px 10px;           
   background: #f2f5fc;
   font-family: "Poppins", sans-serif;
 }
 
-/* IMAGE SECTION SMALLER */
+
 .register-left {
-  width: 260px;
+  width: 50%;
   margin-bottom: 15px;
 }
 
@@ -22,17 +22,16 @@
   height: auto;
 }
 
-/* RIGHT SECTION */
+
 .register-right {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-/* FORM CARD SMALLER & CENTERED */
 .register-form {
   width: 100%;
-  max-width: 430px;       /* SMALL COMPACT FORM */
+  max-width: 500px;       
   background: #ffffff;
   padding: 25px 25px;
   border-radius: 12px;
@@ -41,7 +40,7 @@
   animation: slideUp 0.7s ease;
 }
 
-/* HEADING */
+
 .register-form h2 {
   font-size: 22px;
   text-align: center;
@@ -50,14 +49,12 @@
   color: #2d3e50;
 }
 
-/* MAKE FIELDS SINGLE-COLUMN */
 .field-box {
   display: flex;
   flex-direction: column !important;
   gap: 0px;
 }
 
-/* INPUT FIELDS */
 .register-form input,
 .register-form select {
   width: 100%;
@@ -71,13 +68,13 @@
   transition: 0.25s ease;
 }
 
-/* DROPDOWN OPTIONS FIX */
+
 .register-form option {
   background: #ffffff !important;
   color: #2d3e50 !important;
 }
 
-/* FOCUS STATE */
+
 .register-form input:focus,
 .register-form select:focus {
   border-color: #4a48e0;
@@ -86,7 +83,6 @@
   outline: none;
 }
 
-/* ERROR TEXT */
 .error-text {
   background: #ffe2e2;
   border-left: 4px solid #ff4747;
@@ -99,7 +95,7 @@
   font-weight: 500;
 }
 
-/* BUTTON */
+
 .register-btn {
   width: 100%;
   padding: 11px;
@@ -119,7 +115,6 @@
   transform: translateY(-2px);
 }
 
-/* DIVIDER */
 .divider {
   text-align: center;
   margin: 15px 0;
@@ -146,7 +141,6 @@
   right: 0;
 }
 
-/* LOGIN TEXT */
 .login-text {
   text-align: center;
   color: #4a4f5c;
@@ -159,8 +153,6 @@
   text-decoration: none;
 }
 
-
-/* PASSWORD BOX */
 .password-box {
   position: relative;
 }
@@ -168,20 +160,18 @@
 .toggle-eye {
   position: absolute;
   right: 12px;
-  top: 30%;
+  top: 50%;
   font-size: 18px;
   cursor: pointer;
   color: #4a48e0;
 }
 
 
-/* ANIMATIONS */
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* MOBILE FIX */
 @media (max-width: 600px) {
   .register-left {
     width: 180px;
@@ -190,3 +180,5 @@
   .register-form {
     padding: 18px;
     max-width: 360px;
+  }
+}
